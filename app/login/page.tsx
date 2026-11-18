@@ -21,7 +21,7 @@ export default async function Login({ searchParams }: { searchParams: Promise<{ 
             <form action={login} className="grid gap-5">
               {accountMode && (
                 <label className="login-label grid gap-2">E-mail
-                  <input type="email" name="email" autoComplete="username" placeholder="seu@email.com" required maxLength={254} />
+                  <input type="email" name="email" autoComplete="section-studio-account username" placeholder="seu@email.com" required maxLength={254} />
                 </label>
               )}
               <PasswordField accountMode={accountMode} />
