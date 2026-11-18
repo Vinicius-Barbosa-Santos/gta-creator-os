@@ -5,11 +5,21 @@ import { login } from "../actions";
 import { authorized, configured } from "../session";
 import { supabaseConfig, usesSupabase } from "../supabase/config";
 
+const loginErrors = {
+  acesso: "E-mail ou senha inválidos. Use as credenciais de um usuário criado para o Estúdio.",
+  confirmacao: "O e-mail da conta ainda não foi confirmado.",
+  limite: "Muitas tentativas. Aguarde um pouco antes de tentar novamente.",
+  conexao: "O Estúdio não conseguiu conectar ao serviço de login. Tente novamente em instantes.",
+};
+
 export default async function Login({ searchParams }: { searchParams: Promise<{ erro?: string }> }) {
   if (await authorized()) redirect("/studio");
   const accountMode = usesSupabase();
   const enabled = accountMode ? Boolean(supabaseConfig()) : configured();
   const { erro } = await searchParams;
+  const errorMessage = erro && Object.hasOwn(loginErrors, erro)
+    ? loginErrors[erro as keyof typeof loginErrors]
+    : undefined;
   return (
     <main className="shell py-16">
       <div className="mx-auto grid max-w-2xl gap-4">
@@ -25,7 +35,7 @@ export default async function Login({ searchParams }: { searchParams: Promise<{ 
                 </label>
               )}
               <PasswordField accountMode={accountMode} />
-              {erro && <p role="alert" className="login-error">Não foi possível entrar. Confira suas credenciais.</p>}
+              {errorMessage && <p role="alert" className="login-error">{accountMode ? errorMessage : "Chave de acesso inválida."}</p>}
               <button className="button login-submit">Entrar no estúdio <span aria-hidden="true">→</span></button>
             </form>
           ) : (

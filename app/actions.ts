@@ -17,7 +17,12 @@ export async function login(form: FormData) {
     if (!client || !email || email.length > 254 || typeof password !== "string" ||
         !password || password.length > 256) redirect("/login?erro=acesso");
     const { error } = await client.auth.signInWithPassword({ email, password });
-    if (error) redirect("/login?erro=acesso");
+    if (error) {
+      if (error.code === "email_not_confirmed") redirect("/login?erro=confirmacao");
+      if (error.status === 429) redirect("/login?erro=limite");
+      if (!error.status || error.status >= 500) redirect("/login?erro=conexao");
+      redirect("/login?erro=acesso");
+    }
     redirect("/studio");
   }
 
