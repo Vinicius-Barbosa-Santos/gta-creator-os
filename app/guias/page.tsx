@@ -1,9 +1,10 @@
+import PageBanner from "../page-banner";
 import Image from "next/image";
 
 export default function Guias() {
   return (
     <main className="shell grid gap-6 py-12">
-      <h1 className="text-5xl font-black">Guias</h1>
+      <PageBanner title="Guias" cover="/vice-city.webp" />
       <article id="captura" className="portal-card grid overflow-hidden !p-0 md:grid-cols-[1fr_2fr]">
         <div className="relative aspect-video md:aspect-auto">
           <Image

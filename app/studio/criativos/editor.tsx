@@ -150,7 +150,7 @@ export default function CreativeEditor() {
         <label className="grid gap-2">Linha principal<input value={title} maxLength={36} onChange={(e) => setTitle(e.target.value)} /></label>
         <label className="grid gap-2">Linha de destaque<input value={subtitle} maxLength={36} onChange={(e) => setSubtitle(e.target.value)} /></label>
         <label className="grid gap-2">Paleta
-          <select className="rounded border border-slate-500 bg-slate-950 p-2" value={theme} onChange={(e) => setTheme(e.target.value === "neon" ? "neon" : "sunset")}>
+          <select value={theme} onChange={(e) => setTheme(e.target.value === "neon" ? "neon" : "sunset")}>
             <option value="sunset">Pôr do sol</option><option value="neon">Neon</option>
           </select>
         </label>

@@ -1,3 +1,4 @@
+import PageBanner from "../../page-banner";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { authorized } from "../../session";
@@ -9,8 +10,11 @@ export default async function Production() {
   if (!(await authorized())) redirect("/login");
   return (
     <main className="shell py-10">
-      <Link href="/studio" className="accent">← Estúdio</Link>
-      <h1 className="my-6 text-4xl font-black">Produção de conteúdo</h1>
+      <div className="mb-6">
+        <PageBanner title="Produção de conteúdo" cover="/guia-captura.webp">
+          <Link href="/studio" className="portal-secondary mt-4 inline-block">← Estúdio</Link>
+        </PageBanner>
+      </div>
       <Board />
     </main>
   );

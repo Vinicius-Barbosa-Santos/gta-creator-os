@@ -1,3 +1,4 @@
+import PageBanner from "../page-banner";
 import Link from "next/link";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -24,12 +25,14 @@ export default async function Studio({ searchParams }: { searchParams: Promise<{
 
   return (
     <main className="shell py-10">
-      <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <p className="eyebrow">ESTÚDIO PRIVADO</p>
-          <h1 className="mt-2 text-4xl font-black">{profile?.name ?? "Configure seu canal"}</h1>
-        </div>
-        <div className="flex flex-wrap items-center gap-4"><Link href="/studio/producao" className="button">Produção e agenda</Link><Link href="/studio/criativos" className="accent">Thumbnails e vinhetas</Link><form action={logout}><button className="accent cursor-pointer">Sair</button></form></div>
+      <div className="mb-6">
+        <PageBanner title={profile?.name ?? "Configure seu canal"} cover="/guia-captura.webp">
+          <nav className="mt-5 flex flex-wrap items-center gap-4" aria-label="Ferramentas do estúdio">
+            <Link href="/studio/producao" className="portal-cta">Produção e agenda</Link>
+            <Link href="/studio/criativos" className="portal-secondary">Thumbnails e vinhetas</Link>
+            <form action={logout}><button className="portal-secondary cursor-pointer">Sair</button></form>
+          </nav>
+        </PageBanner>
       </div>
       <div className="grid gap-6 md:grid-cols-2">
         <section className="panel">
@@ -67,7 +70,7 @@ export default async function Studio({ searchParams }: { searchParams: Promise<{
             <label className="grid gap-2">Nome do canal<input name="name" defaultValue={profile?.name} required maxLength={60} /></label>
             <label className="grid gap-2">Horas por semana<input name="hours" type="number" min={1} max={40} defaultValue={profile?.hours ?? 8} required /></label>
             <label className="grid gap-2">Etapa atual
-              <select className="w-full rounded border border-slate-500 bg-slate-950 p-2.5" name="stage" defaultValue={profile?.stage ?? "captura"}>
+              <select className="w-full " name="stage" defaultValue={profile?.stage ?? "captura"}>
                 {Object.entries(stages).map(([key, stage]) => <option key={key} value={key}>{stage.label}</option>)}
               </select>
             </label>

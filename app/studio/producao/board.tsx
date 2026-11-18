@@ -88,13 +88,13 @@ export default function Board() {
             <label className="grid gap-2">Título<input name="title" required maxLength={120} defaultValue={editing?.title} /></label>
             <label className="grid gap-2">Data editorial<input type="date" name="date" defaultValue={editing?.date} /></label>
             <label className="grid gap-2">Formato
-              <select className="rounded border border-slate-500 bg-slate-950 p-2" name="format" defaultValue={editing?.format}>{formats.map((format) => <option key={format}>{format}</option>)}</select>
+              <select name="format" defaultValue={editing?.format}>{formats.map((format) => <option key={format}>{format}</option>)}</select>
             </label>
             <label className="grid gap-2">Etapa
-              <select className="rounded border border-slate-500 bg-slate-950 p-2" name="stage" defaultValue={editing?.stage}>{stages.map((stage) => <option key={stage}>{stage}</option>)}</select>
+              <select name="stage" defaultValue={editing?.stage}>{stages.map((stage) => <option key={stage}>{stage}</option>)}</select>
             </label>
             <label className="grid gap-2 sm:col-span-2">Roteiro e checklist
-              <textarea className="rounded border border-slate-500 bg-slate-950 p-2" name="notes" rows={4} maxLength={1500} defaultValue={editing?.notes} />
+              <textarea name="notes" rows={4} maxLength={1500} defaultValue={editing?.notes} />
             </label>
             <label className="grid gap-2">Visualizações (opcional)
               <input type="number" name="views" min={0} max={1_000_000_000} step={1} defaultValue={editing?.views} />
@@ -111,13 +111,13 @@ export default function Board() {
           {entries.length === 0 && <p className="mb-4 text-neutral-400">Adicione uma ideia para iniciar o quadro.</p>}
           <div className="grid snap-x snap-mandatory auto-cols-[minmax(15rem,30%)] grid-flow-col gap-3 overflow-x-auto pb-4" tabIndex={0} aria-label="Etapas do quadro">
             {stages.map((stage) => (
-              <section className="snap-start rounded-lg border border-slate-700 bg-slate-900 p-4" key={stage}>
+              <section className="snap-start studio-lane rounded-xl p-4" key={stage}>
                 <h3 className="font-bold">{stage}</h3>
                 {entries.filter((entry) => entry.stage === stage).map((entry) => (
                   <article key={entry.id} className="mt-3 grid gap-2 rounded border border-slate-700 p-3">
                     <h4 className="break-words font-semibold">{entry.title}</h4>
                     <p className="text-sm text-neutral-400">{entry.format}</p>
-                    <select aria-label={`Etapa de ${entry.title}`} className="rounded border border-slate-500 bg-slate-950 p-2" value={entry.stage}
+                    <select aria-label={`Etapa de ${entry.title}`} value={entry.stage}
                       onChange={(event) => persist(entries.map((item) => item.id === entry.id ? { ...item, stage: event.target.value } : item))}>
                       {stages.map((option) => <option key={option}>{option}</option>)}
                     </select>

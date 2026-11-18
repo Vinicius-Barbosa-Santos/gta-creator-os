@@ -1,3 +1,4 @@
+import PageBanner from "../page-banner";
 import type { Metadata } from "next";
 import { googleHeadlines, googleNews } from "./feed";
 
@@ -28,8 +29,9 @@ export default async function News() {
 
   return (
     <main className="shell py-12">
-      <p className="portal-label">GTA VI E GTA ONLINE</p>
-      <h1 className="mt-3 text-5xl font-black">Notícias de GTA</h1>
+      <PageBanner title="Notícias de GTA" cover="/portal-leonida.webp">
+        <p className="portal-label mt-3">GTA VI E GTA ONLINE</p>
+      </PageBanner>
       <section className="mt-9" aria-labelledby="official-news">
         <h2 id="official-news" className="text-2xl font-bold">Confirmado pela Rockstar</h2>
         <p className="mt-2 text-sm text-neutral-400">Curadoria revisada em 18/11/2026.</p>

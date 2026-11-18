@@ -19,7 +19,7 @@ export default function IdeasPanel({ onSave }: { onSave: (idea: Idea, format: st
       <p className="mt-2 text-sm text-neutral-300">O formato, o tempo e a descrição abaixo são enviados à OpenAI. Revise as ideias antes de produzir.</p>
       <form action={submit} className="mt-4 grid gap-4 sm:grid-cols-2">
         <label className="grid gap-2">Formato
-          <select name="format" defaultValue="Short" className="rounded border border-slate-500 bg-slate-950 p-2">
+          <select name="format" defaultValue="Short" className="">
             {formats.map((format) => <option key={format}>{format}</option>)}
           </select>
         </label>
@@ -27,7 +27,7 @@ export default function IdeasPanel({ onSave }: { onSave: (idea: Idea, format: st
           <input name="minutes" type="number" min={15} max={240} step={1} required defaultValue={30} />
         </label>
         <label className="grid gap-2 sm:col-span-2">Gravações que você já tem (opcional)
-          <textarea name="footage" maxLength={800} rows={3} className="rounded border border-slate-500 bg-slate-950 p-2" placeholder="Ex.: 5 minutos de gameplay do PS5 gravados no OBS" />
+          <textarea name="footage" maxLength={800} rows={3} placeholder="Ex.: 5 minutos de gameplay do PS5 gravados no OBS" />
         </label>
         <button className="button justify-self-start disabled:opacity-50" disabled={pending}>{pending ? "Gerando pautas…" : "Sugerir pautas"}</button>
       </form>
