@@ -16,28 +16,61 @@ body {
   color: #b8f34a;
 }
 .portal {
-  background: radial-gradient(ellipse at 80% 100%, #2a1634, transparent 42%), #100d19;
+  background: radial-gradient(ellipse at 70% 0%, #302447, transparent 60%), #0b0f19;
 }
-.hero {
-  border-block: 1px solid #64405c;
-  background:
-    linear-gradient(90deg, #100b1a 1%, #100b1ad6 30%, #100b1a26 80%),
-    linear-gradient(0deg, #100d19 0%, transparent 40%),
-    url("/vice-city.webp") center 58% / cover no-repeat,
-    #281333;
+.portal-shell {
+  width: min(1240px, calc(100% - 2.5rem));
+  margin-inline: auto;
+}
+.portal-feature {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: end;
+  min-height: clamp(31rem, 43vw, 36rem);
+  overflow: hidden;
+  border-radius: clamp(1.15rem, 3vw, 2.25rem);
+  background: #29203f;
+}
+.portal-feature-art { object-position: 50% 51%; }
+.portal-feature::after,
+.portal-tile::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.portal-feature::after {
+  background: linear-gradient(90deg, #160e2af2, #211338a6 34%, #21133808 72%);
+}
+.portal-feature-copy {
+  z-index: 1;
+  padding: clamp(1.4rem, 5vw, 4.5rem);
 }
 .display {
-  font-family: "Arial Black", "Arial", sans-serif;
-  font-size: clamp(3.1rem, 9.5vw, 8.75rem);
+  font-family: "Avenir Next Condensed", "Arial Narrow", Arial, sans-serif;
+  font-size: clamp(3.35rem, 8.5vw, 7.35rem);
   line-height: 0.87;
-  font-weight: 950;
-  letter-spacing: -0.07em;
+  font-weight: 900;
+  letter-spacing: -0.045em;
+  text-transform: uppercase;
 }
-.display span {
-  color: #ff9ebc;
-  background: linear-gradient(115deg, #ffc695, #ff90c5 70%, #d59efc);
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+.display span { color: #ffe0a6; }
+.portal-tile {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: end;
+  min-height: 16rem;
+  overflow: hidden;
+  border-radius: clamp(0.9rem, 2vw, 1.65rem);
+  background: #261e36;
+}
+.portal-tile::after { background: linear-gradient(0deg, #0e0919f5, #17102490 46%, #17102422 80%); }
+.portal-tile > div { z-index: 1; }
+@media (prefers-reduced-motion: no-preference) {
+  .portal-tile img { transition: transform 220ms ease; }
+  .portal-tile:hover img { transform: scale(1.035); }
 }
 .portal-label {
   color: #ffc3d8;
@@ -50,7 +83,7 @@ body {
   align-items: center;
   gap: 0.7rem;
   padding: 0.8rem 1.15rem;
-  border-radius: 0.35rem;
+  border-radius: 999px;
   background: #ff9dbb;
   color: #230f20;
   font-weight: 800;
@@ -73,11 +106,9 @@ body {
   background: linear-gradient(135deg, #30192b, #1a1324 80%);
 }
 @media (max-width: 639px) {
-  .hero {
-    background:
-      linear-gradient(0deg, #100d19 3%, #100b1ac9 35%, #100b1a25 90%),
-      url("/vice-city.webp") 65% center / cover no-repeat,
-      #281333;
+  .portal-feature-art { object-position: 70% 50%; }
+  .portal-feature::after {
+    background: linear-gradient(0deg, #130c23 1%, #130c23d9 36%, #130c231f 82%);
   }
 }
 .eyebrow {

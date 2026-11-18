@@ -1,38 +1,38 @@
+import Image from "next/image";
 import Link from "next/link";
+
+const cards = [
+  { href: "/noticias", category: "NOTÍCIAS", title: "O que acontece em GTA", cover: "/vice-city.webp", position: "object-[68%_center]" },
+  { href: "/guias#captura", category: "GUIA GRATUITO", title: "Da captura ao primeiro clipe", cover: "/guia-captura.webp", position: "object-center" },
+  { href: "/guias#premium", category: "GUIA EM PREPARAÇÃO", title: "Primeiras horas em Vice City", cover: "/portal-leonida.webp", position: "object-[76%_center]" },
+];
 
 export default function Home() {
   return (
-    <main className="portal">
-      <section className="hero">
-        <div className="shell relative flex min-h-[min(42rem,78svh)] flex-col justify-end py-16 sm:justify-center sm:py-24">
-          <p className="portal-label">PORTAL INDEPENDENTE SOBRE GTA 6</p>
-          <h1 className="display mt-5">DE OLHO EM<br /><span>VICE CITY.</span></h1>
-          <p className="mt-6 max-w-sm text-base leading-relaxed text-white sm:text-lg">
-            Guias em português para acompanhar GTA 6 e preparar suas gravações no PS5.
-          </p>
-          <div className="mt-7 flex flex-wrap items-center gap-4">
-            <Link href="/guias#captura" className="portal-cta">Ler guia gratuito <span aria-hidden="true">↗</span></Link>
-            <Link href="/guias#premium" className="portal-secondary">Conhecer o premium</Link>
+    <main className="portal pb-12">
+      <div className="portal-shell">
+        <section className="portal-feature" aria-labelledby="portal-title">
+          <Image src="/portal-leonida.webp" alt="" fill priority unoptimized className="portal-feature-art object-cover" />
+          <div className="portal-feature-copy relative">
+            <p className="portal-label">PORTAL INDEPENDENTE SOBRE GTA 6</p>
+            <h1 id="portal-title" className="display mt-4">De olho em<br /><span>Vice City.</span></h1>
+            <p className="mt-5 max-w-xs text-base leading-relaxed text-white">Notícias de GTA, guias em português e dicas para gravar no PS5.</p>
+            <Link href="/noticias" className="portal-cta mt-6">Acompanhar notícias <span aria-hidden="true">↗</span></Link>
           </div>
-        </div>
-      </section>
-      <section aria-labelledby="guides-title" className="shell py-12 sm:py-16">
-        <h2 id="guides-title" className="mb-6 text-3xl font-black tracking-tight sm:text-4xl">Guias do portal</h2>
-        <div className="grid gap-4 md:grid-cols-2">
-          <article className="portal-card">
-            <p className="portal-label">GRATUITO · PS5 E OBS</p>
-            <h3 className="mt-3 text-2xl font-black">Da captura ao primeiro clipe</h3>
-            <p className="mt-3 text-neutral-300">Teste imagem, áudio e sincronismo e escolha um trecho para seu primeiro Short.</p>
-            <Link className="portal-secondary mt-6 inline-block" href="/guias#captura">Abrir guia <span aria-hidden="true">↗</span></Link>
-          </article>
-          <article className="portal-card portal-card-premium">
-            <p className="portal-label">PREMIUM · EM PREPARAÇÃO</p>
-            <h3 className="mt-3 text-2xl font-black">Primeiras horas em Vice City</h3>
-            <p className="mt-3 text-neutral-300">A proposta reúne rotas para testar no PS5, demonstrações curtas e um checklist de progresso.</p>
-            <Link className="portal-secondary mt-6 inline-block" href="/guias#premium">Ver proposta <span aria-hidden="true">↗</span></Link>
-          </article>
-        </div>
-      </section>
+        </section>
+        <nav aria-label="Explorar o portal" className="mt-5 grid gap-5 sm:grid-cols-3 sm:mt-7">
+          {cards.map((card) => (
+            <Link key={card.href} href={card.href} className="portal-tile">
+              <Image src={card.cover} alt="" fill unoptimized className={`object-cover ${card.position}`} />
+              <div className="relative p-5 sm:p-6">
+                <p className="portal-label">{card.category}</p>
+                <h2 className="mt-2 text-xl font-black leading-tight sm:text-2xl">{card.title}</h2>
+                <span className="mt-3 inline-block text-xl text-pink-200" aria-hidden="true">↗</span>
+              </div>
+            </Link>
+          ))}
+        </nav>
+      </div>
     </main>
   );
 }
