@@ -1,3 +1,4 @@
+import PasswordField from "./password-field";
 import PageBanner from "../page-banner";
 import { redirect } from "next/navigation";
 import { login } from "../actions";
@@ -15,25 +16,17 @@ export default async function Login({ searchParams }: { searchParams: Promise<{ 
         <PageBanner title="Entrar no estúdio" cover="/guia-captura.webp">
           <p className="portal-label mt-3">ÁREA PRIVADA</p>
         </PageBanner>
-        <section className="panel">
+        <section className="panel login-panel">
           {enabled ? (
-            <form action={login} className="grid gap-4">
-              {accountMode ? (
-                <>
-                  <label className="grid gap-2">E-mail
-                    <input type="email" name="email" autoComplete="username" required maxLength={254} />
-                  </label>
-                  <label className="grid gap-2">Senha
-                    <input type="password" name="password" autoComplete="current-password" required maxLength={256} />
-                  </label>
-                </>
-              ) : (
-                <label className="grid gap-2">Chave de acesso
-                  <input type="password" name="key" autoComplete="current-password" required maxLength={256} />
+            <form action={login} className="grid gap-5">
+              {accountMode && (
+                <label className="login-label grid gap-2">E-mail
+                  <input type="email" name="email" autoComplete="username" placeholder="seu@email.com" required maxLength={254} />
                 </label>
               )}
-              {erro && <p role="alert" className="text-rose-300">Não foi possível entrar. Confira suas credenciais.</p>}
-              <button className="button">Entrar</button>
+              <PasswordField accountMode={accountMode} />
+              {erro && <p role="alert" className="login-error">Não foi possível entrar. Confira suas credenciais.</p>}
+              <button className="button login-submit">Entrar no estúdio <span aria-hidden="true">→</span></button>
             </form>
           ) : (
             <p className="mt-5 text-neutral-300">O acesso privado fica disponível após a configuração do estúdio.</p>
