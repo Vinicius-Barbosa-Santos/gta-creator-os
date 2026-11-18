@@ -4,6 +4,7 @@ import "./globals.css";
 import { siteName, siteUrl, socialLinks } from "./site";
 
 export const metadata: Metadata = {
+  verification: { google: "t1bR0fA1jI6ixqEskNfWooa7Y0pROaiAICK2nH7FYzU" },
   metadataBase: new URL(siteUrl),
   title: { default: "GTA 6: notícias e guias para PS5 | Viny Plays", template: "%s | Viny Plays" },
   openGraph: { siteName, locale: "pt_BR", type: "website", images: ["/portal-leonida.webp"] },
