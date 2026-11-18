@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { registrationEnabled } from "../../billing/access";
 import { logout } from "../../actions";
 import { accountIdentity } from "../../session";
 import { loadOffer } from "../../billing/offer";
@@ -20,7 +21,7 @@ export default async function PaymentPage({ searchParams }: { searchParams: Prom
       <section className="panel grid max-w-xl gap-4">
         <h1 className="text-3xl font-black">Acesso ao Estúdio Viny Plays</h1>
         <p>Organize pautas, roteiros e publicações no seu próprio quadro.</p>
-        {!account ? <Link className="portal-secondary" href="/login">Entrar na sua conta →</Link>
+        {!account ? <div className="flex flex-wrap gap-4"><Link className="portal-secondary" href="/login">Entrar na sua conta →</Link>{registrationEnabled() && <Link className="portal-secondary" href="/cadastro">Criar conta →</Link>}</div>
           : access?.data?.entitled ? <Link className="portal-secondary" href="/studio">Abrir o Estúdio →</Link>
           : available ? (
             <form action={startCheckout} className="grid justify-items-start gap-3">

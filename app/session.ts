@@ -1,4 +1,5 @@
 import { createHash, createHmac, timingSafeEqual } from "node:crypto";
+import { registrationEnabled, studioBillingStatus } from "./billing/access";
 import { billingMode } from "./billing/config";
 import { cookies } from "next/headers";
 import { usesSupabase } from "./supabase/config";
@@ -56,10 +57,14 @@ export async function studioIdentity() {
   if (!usesSupabase()) return !mode && (await ownerAuthorized()) ? { kind: "local" as const } : null;
 
   const account = await accountIdentity();
-  if (!account || !mode) return account;
+  if (!account) return null;
 
-  const { data, error } = await account.client.rpc("studio_billing_status").single<{ mode: string; entitled: boolean }>();
-  return !error && data?.mode === mode && data.entitled ? account : null;
+  const { data, error } = await studioBillingStatus(account.client);
+  // Earlier deployments can still run before the billing migrations are applied.
+  if (error?.code === "PGRST202" && !mode && !registrationEnabled()) return account;
+  if (!data?.entitled || (registrationEnabled() && data.mode === "disabled")) return null;
+  if (data.mode === "closed") return account;
+  return data.mode === (mode ?? "disabled") ? account : null;
 }
 
 export async function authorized() {

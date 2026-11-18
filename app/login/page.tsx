@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { registrationEnabled } from "../billing/access";
 import PasswordField from "./password-field";
 import PageBanner from "../page-banner";
 import { redirect } from "next/navigation";
@@ -9,7 +11,8 @@ import { supabaseConfig, usesSupabase } from "../supabase/config";
 export const metadata: Metadata = { title: "Entrar no Estúdio", robots: { index: false } };
 
 const loginErrors = {
-  acesso: "E-mail ou senha inválidos. Use as credenciais de um usuário criado para o Estúdio.",
+  acesso: "E-mail ou senha inválidos.",
+  link: "O link de confirmação está inválido ou expirou.",
   confirmacao: "O e-mail da conta ainda não foi confirmado.",
   limite: "Muitas tentativas. Aguarde um pouco antes de tentar novamente.",
   conexao: "O Estúdio não conseguiu conectar ao serviço de login. Tente novamente em instantes.",
@@ -45,6 +48,7 @@ export default async function Login({ searchParams }: { searchParams: Promise<{ 
           ) : (
             <p className="mt-5 text-neutral-300">O acesso privado fica disponível após a configuração do estúdio.</p>
           )}
+          {enabled && accountMode && registrationEnabled() && <Link href="/cadastro" className="portal-secondary mt-5 inline-block">Criar conta →</Link>}
         </section>
       </div>
     </main>

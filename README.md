@@ -70,3 +70,31 @@ de teste. Atribua o acesso aos primeiros usuários criando contas individuais.
 Nunca exponha a chave de serviço do Supabase ou as chaves de servidor da Stripe em
 variáveis `NEXT_PUBLIC_*`. O acesso usa políticas RLS e o retorno do checkout apenas
 mostra o estado registrado no banco.
+
+### Cadastro público e acesso do proprietário
+
+Aplique também a migração `20261118174500_studio_membership.sql`.
+Use o UUID da sua conta existente em **Authentication → Users**. Substitua
+`UUID_DA_CONTA` pelo UUID real antes de executar no SQL Editor:
+
+```sql
+begin;
+insert into public.studio_owners (user_id) values ('UUID_DA_CONTA')
+on conflict do nothing;
+update public.studio_billing_settings set mode = 'closed' where singleton;
+commit;
+```
+
+`closed` libera só o proprietário. Para aceitar compradores, altere para
+`test` ou `live` no ambiente correspondente e configure a Stripe. Confirme que o
+Supabase exige confirmação de e-mail e configure SMTP antes de abrir o cadastro.
+Use a URL pública do site como Site URL e, no modelo Confirm signup, direcione o
+link para `{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}`.
+Ative `STUDIO_PUBLIC_SIGNUP=true` na Vercel depois dessas etapas e faça um deploy.
+Em ambientes sem cadastro público, desative também o cadastro no painel do
+Supabase se a intenção for manter apenas as contas pré-criadas.
+
+A validação de checkout com duas abas deve usar a mesma conta e confirmar apenas
+uma sessão pagável. Se o checkout ficar em estado incerto, consulte a sessão e
+o PaymentIntent na Stripe antes de liberar uma nova tentativa. A expiração
+sozinha no banco não libera uma segunda cobrança.
