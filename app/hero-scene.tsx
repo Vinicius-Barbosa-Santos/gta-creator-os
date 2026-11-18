@@ -3,8 +3,8 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-const still = "/vice-city-scene-still.webp";
-const animation = "/vice-city-scene.webp";
+const still = "/portal-leonida.webp";
+const animation = "/portal-leonida-animated.webp";
 
 export default function HeroScene() {
   const [playing, setPlaying] = useState(false);
