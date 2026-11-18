@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { calendar, metrics, validDate, validEntry } from "../app/studio/producao/model.mjs";
+import { calendar, metrics, readEntries, validDate, validEntry, weeklyPublications } from "../app/studio/producao/model.mjs";
 
 const entry = { id: "1", title: "Primeiro Short", format: "Short", stage: "Ideia", date: "", notes: "" };
 
@@ -35,4 +35,26 @@ test("soma métricas registradas apenas de conteúdo publicado ou analisado", ()
   ]), { publications: 3, measured: 2, views: 15, impressions: 50 });
   assert.equal(validEntry({ ...entry, views: -1 }), false);
   assert.equal(validEntry({ ...entry, impressions: 1.5 }), false);
+});
+
+test("conta publicações registradas desde segunda no horário de Brasília", () => {
+  const published = { ...entry, stage: "Publicado" };
+  const date = new Date("2026-11-19T01:00:00Z");
+  assert.deepEqual(weeklyPublications([
+    { ...published, publishedOn: "2026-11-16" },
+    { ...published, format: "Vídeo longo", stage: "Analisado", publishedOn: "2026-11-18" },
+    { ...published, format: "Live", publishedOn: "2026-11-17" },
+    { ...published, publishedOn: "2026-11-15" },
+    { ...published, publishedOn: "2026-11-19" },
+    { ...entry, stage: "Agendado", publishedOn: "2026-11-18" },
+    { ...published, date: "2026-11-18" },
+  ], date), { long: 1, shorts: 1, lives: 1, undated: 1 });
+  assert.deepEqual(weeklyPublications([], date), { long: 0, shorts: 0, lives: 0, undated: 0 });
+});
+
+test("mantém os cartões antigos e distingue quadro vazio de dados inválidos", () => {
+  assert.deepEqual(readEntries({ getItem: () => JSON.stringify([entry]) }), [entry]);
+  assert.deepEqual(readEntries({ getItem: () => null }), []);
+  assert.throws(() => readEntries({ getItem: () => '{"unexpected":true}' }));
+  assert.equal(validEntry({ ...entry, publishedOn: "2026-02-30" }), false);
 });

@@ -1,11 +1,10 @@
 "use client";
 
 import { useEffect, useState, type FormEvent } from "react";
-import { calendar, formats, metrics, stages, validEntry, type Entry } from "./model.mjs";
+import { calendar, formats, isPublished, metrics, publicationToday, readEntries, stages, storageKey, validEntry, type Entry } from "./model.mjs";
 
 import IdeasPanel from "./ideas-panel";
 
-const storageKey = "gta-studio-production-v1";
 const dateFormat = new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeZone: "UTC" });
 
 export default function Board() {
@@ -16,9 +15,7 @@ export default function Board() {
 
   useEffect(() => {
     try {
-      const saved: unknown = JSON.parse(localStorage.getItem(storageKey) ?? "[]");
-      if (!Array.isArray(saved) || !saved.every(validEntry)) throw new Error("Dados inválidos");
-      setEntries(saved);
+      setEntries(readEntries(localStorage));
     } catch {
       setError("Não foi possível carregar o quadro neste navegador.");
     }
@@ -43,6 +40,7 @@ export default function Board() {
     const values = new FormData(form);
     const views = values.get("views");
     const impressions = values.get("impressions");
+    const publishedOn = String(values.get("publishedOn") ?? "");
     const entry: Entry = {
       id: editing?.id ?? crypto.randomUUID(),
       title: String(values.get("title") ?? "").trim(),
@@ -50,9 +48,14 @@ export default function Board() {
       stage: String(values.get("stage") ?? ""),
       date: String(values.get("date") ?? ""),
       notes: String(values.get("notes") ?? "").trim(),
+      publishedOn: publishedOn || undefined,
       views: views === "" ? undefined : Number(views),
       impressions: impressions === "" ? undefined : Number(impressions),
     };
+    if (isPublished(entry.stage) && (!publishedOn || publishedOn > publicationToday())) {
+      setError("Informe a data em que o conteúdo foi publicado.");
+      return;
+    }
     if (!validEntry(entry)) {
       setError("Confira os campos do conteúdo.");
       return;
@@ -83,10 +86,14 @@ export default function Board() {
             };
             return validEntry(entry) && persist([...entries, entry]);
           }} />
-          <form key={editing?.id ?? "new"} id="conteudo" onSubmit={save} className="panel grid gap-4 sm:grid-cols-2">
+          <form key={editing ? `${editing.id}:${editing.stage}` : "new"} id="conteudo" onSubmit={save} className="panel grid gap-4 sm:grid-cols-2">
             <h2 className="text-xl font-bold sm:col-span-2">{editing ? "Editar conteúdo" : "Novo conteúdo"}</h2>
             <label className="grid gap-2">Título<input name="title" required maxLength={120} defaultValue={editing?.title} /></label>
             <label className="grid gap-2">Data editorial<input type="date" name="date" defaultValue={editing?.date} /></label>
+            <label className="grid gap-2">Data real de publicação
+              <input type="date" name="publishedOn" defaultValue={editing?.publishedOn} aria-describedby="publication-date-help" />
+              <span id="publication-date-help" className="text-sm text-neutral-300">Preencha para conteúdos publicados ou analisados.</span>
+            </label>
             <label className="grid gap-2">Formato
               <select name="format" defaultValue={editing?.format}>{formats.map((format) => <option key={format}>{format}</option>)}</select>
             </label>
@@ -118,7 +125,15 @@ export default function Board() {
                     <h4 className="break-words font-semibold">{entry.title}</h4>
                     <p className="text-sm text-neutral-400">{entry.format}</p>
                     <select aria-label={`Etapa de ${entry.title}`} value={entry.stage}
-                      onChange={(event) => persist(entries.map((item) => item.id === entry.id ? { ...item, stage: event.target.value } : item))}>
+                      onChange={(event) => {
+                        const stage = event.target.value;
+                        if (isPublished(stage) && (!entry.publishedOn || entry.publishedOn > publicationToday())) {
+                          setEditing({ ...entry, stage });
+                          document.getElementById("conteudo")?.scrollIntoView({ block: "start" });
+                          return;
+                        }
+                        persist(entries.map((item) => item.id === entry.id ? { ...item, stage } : item));
+                      }}>
                       {stages.map((option) => <option key={option}>{option}</option>)}
                     </select>
                     <a href="#conteudo" className="accent" onClick={() => setEditing(entry)}>Editar</a>

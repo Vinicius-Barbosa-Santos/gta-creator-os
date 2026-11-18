@@ -1,3 +1,4 @@
+import WeeklyProduction from "./weekly-production";
 import PageBanner from "../page-banner";
 import Link from "next/link";
 import { cookies } from "next/headers";
@@ -57,14 +58,7 @@ export default async function Studio({ searchParams }: { searchParams: Promise<{
             <p className="mt-3 text-neutral-300">Preencha o perfil para gerar o plano com base no seu tempo e no estágio do canal.</p>
           )}
         </section>
-        <section className="panel">
-          <p className="eyebrow">DADOS FICTÍCIOS PARA DEMONSTRAÇÃO</p>
-          <h2 className="mt-3 text-2xl font-bold">Produção da semana</h2>
-          <dl className="mt-5 grid grid-cols-2 gap-4">
-            <div><dt>Vídeos longos</dt><dd className="accent text-4xl font-black">1</dd></div>
-            <div><dt>Shorts</dt><dd className="accent text-4xl font-black">2</dd></div>
-          </dl>
-        </section>
+        <WeeklyProduction />
         <section id="perfil" className="panel md:col-span-2">
           <h2 className="text-2xl font-bold">Perfil do canal</h2>
           <form action={saveProfile} className="mt-5 grid items-end gap-4 sm:grid-cols-2">
