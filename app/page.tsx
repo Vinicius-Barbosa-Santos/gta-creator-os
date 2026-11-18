@@ -17,7 +17,10 @@ export default function Home() {
             <p className="portal-label">PORTAL INDEPENDENTE SOBRE GTA 6</p>
             <h1 id="portal-title" className="display mt-4">De olho em<br /><span>Vice City.</span></h1>
             <p className="mt-5 max-w-xs text-base leading-relaxed text-white">Notícias de GTA, guias em português e dicas para gravar no PS5.</p>
-            <Link href="/noticias" className="portal-cta mt-6">Acompanhar notícias <span aria-hidden="true">↗</span></Link>
+            <div className="mt-6 flex flex-wrap items-center gap-4">
+              <Link href="/noticias" className="portal-cta">Acompanhar notícias <span aria-hidden="true">↗</span></Link>
+              <Link href="/demo" className="portal-secondary">Ver demonstração</Link>
+            </div>
           </div>
         </section>
         <nav aria-label="Explorar o portal" className="mt-5 grid gap-5 sm:grid-cols-3 sm:mt-7">
