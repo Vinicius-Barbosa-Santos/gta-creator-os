@@ -27,3 +27,9 @@ O perfil fica no navegador em cookie HTTP-only. A sessão assinada expira em oit
 Depois de entrar no estúdio, abra **Produção e agenda**. Cadastre o título, formato e roteiro ou checklist. Mova o conteúdo pelas etapas do quadro usando o seletor do cartão e inclua uma data para aparecer na agenda. O armazenamento atual é por navegador. Use um perfil pessoal e evite cadastrar informações sensíveis no quadro.
 
 O fluxo de qualidade executa instalação pelo lockfile, testes de validação e ordenação da agenda, build de produção e auditoria de dependências.
+
+## Sugestões de pautas com IA
+
+Configure `OPENAI_API_KEY` em `.env.local` ou no ambiente do servidor. Reinicie o desenvolvimento local ou faça um novo deploy. No estúdio, abra **Produção e agenda**, selecione formato e minutos disponíveis e descreva as gravações que você já tem. A descrição é enviada ao provedor para gerar três pautas. Use **Salvar no quadro** para colocar uma pauta na etapa Ideia. Revise o texto antes de publicar.
+
+A chave fica no servidor e as sugestões exigem uma sessão do estúdio. Configure um orçamento para o projeto da API e monitore o consumo. O intervalo de 20 segundos funciona por instância em execução. O modelo padrão pode ser substituído por outro compatível com Responses, raciocínio mínimo e saída estruturada em `OPENAI_IDEAS_MODEL`.

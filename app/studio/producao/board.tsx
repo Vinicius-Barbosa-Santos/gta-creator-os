@@ -3,6 +3,8 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { calendar, formats, metrics, stages, validEntry, type Entry } from "./model.mjs";
 
+import IdeasPanel from "./ideas-panel";
+
 const storageKey = "gta-studio-production-v1";
 const dateFormat = new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeZone: "UTC" });
 
@@ -70,6 +72,17 @@ export default function Board() {
       {error && <p className="mb-4 text-rose-300" role="alert">{error}</p>}
       {entries && (
         <>
+          <IdeasPanel onSave={(idea, format) => {
+            const entry: Entry = {
+              id: crypto.randomUUID(),
+              title: idea.title,
+              format,
+              stage: "Ideia",
+              date: "",
+              notes: `Gancho: ${idea.hook}\n\nRoteiro: ${idea.script}\n\nCenas: ${idea.scenes}`,
+            };
+            return validEntry(entry) && persist([...entries, entry]);
+          }} />
           <form key={editing?.id ?? "new"} id="conteudo" onSubmit={save} className="panel grid gap-4 sm:grid-cols-2">
             <h2 className="text-xl font-bold sm:col-span-2">{editing ? "Editar conteúdo" : "Novo conteúdo"}</h2>
             <label className="grid gap-2">Título<input name="title" required maxLength={120} defaultValue={editing?.title} /></label>
