@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { captureGuidePath } from "./site";
 import Image from "next/image";
 import Link from "next/link";
-import HeroScene from "./hero-scene";
 
 export const metadata: Metadata = { alternates: { canonical: "/" } };
 
@@ -17,7 +16,7 @@ export default function Home() {
     <main className="portal pb-12">
       <div className="portal-shell">
         <section className="portal-feature" aria-labelledby="portal-title">
-          <HeroScene />
+          <Image src="/portal-leonida.webp" alt="" fill priority unoptimized className="portal-feature-art object-cover" />
           <div className="portal-feature-copy relative">
             <p className="portal-label">PORTAL INDEPENDENTE SOBRE GTA 6</p>
             <h1 id="portal-title" className="display mt-4">De olho em<br /><span>Vice City.</span></h1>

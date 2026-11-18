@@ -9,7 +9,7 @@ export default function PageBanner({ title, cover, children }: {
   return (
     <header className="page-banner">
       <Image src={cover} alt="" fill unoptimized className="page-banner-art object-cover" />
-      <div className="relative z-10 w-full min-w-0 p-6 sm:p-10">
+      <div className="page-banner-copy relative z-10 w-full min-w-0 p-6 sm:p-10">
         <h1 className="page-title">{title}</h1>
         {children}
       </div>
