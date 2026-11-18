@@ -40,8 +40,12 @@ export function isPublished(stage) {
   return stage === "Publicado" || stage === "Analisado";
 }
 
-export function readEntries(storage) {
-  const saved = JSON.parse(storage.getItem(storageKey) ?? "[]");
+export function productionStorageKey(accountId) {
+  return accountId ? `${storageKey}:${accountId}` : storageKey;
+}
+
+export function readEntries(storage, accountId) {
+  const saved = JSON.parse(storage.getItem(productionStorageKey(accountId)) ?? "[]");
   if (!Array.isArray(saved) || !saved.every(validEntry)) throw new Error("Dados inválidos");
   return saved;
 }

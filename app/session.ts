@@ -1,5 +1,7 @@
 import { createHash, createHmac, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
+import { usesSupabase } from "./supabase/config";
+import { studioClient } from "./supabase/server";
 
 export const cookieOptions = {
   httpOnly: true,
@@ -27,7 +29,7 @@ export function sign(expiration: string) {
     .digest("hex");
 }
 
-export async function authorized() {
+async function ownerAuthorized() {
   if (!configured()) return false;
   const token = (await cookies()).get("studio-session")?.value;
   if (!token) return false;
@@ -38,4 +40,18 @@ export async function authorized() {
     Number(expiration) > Date.now() &&
     equal(signature, sign(expiration)),
   );
+}
+
+export async function studioIdentity() {
+  if (!usesSupabase()) return (await ownerAuthorized()) ? { kind: "local" as const } : null;
+
+  const client = await studioClient();
+  if (!client) return null;
+  const { data, error } = await client.auth.getClaims();
+  const id = data?.claims.sub;
+  return !error && id ? { kind: "account" as const, id, client } : null;
+}
+
+export async function authorized() {
+  return Boolean(await studioIdentity());
 }

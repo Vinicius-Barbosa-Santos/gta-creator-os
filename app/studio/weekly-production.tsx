@@ -2,16 +2,16 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { readEntries, storageKey, weeklyPublications, type Entry } from "./producao/model.mjs";
+import { productionStorageKey, readEntries, weeklyPublications, type Entry } from "./producao/model.mjs";
 
-export default function WeeklyProduction() {
+export default function WeeklyProduction({ accountId }: { accountId?: string }) {
   const [entries, setEntries] = useState<Entry[] | null>(null);
   const [loadFailed, setLoadFailed] = useState(false);
 
   useEffect(() => {
     function load() {
       try {
-        setEntries(readEntries(localStorage));
+        setEntries(readEntries(localStorage, accountId));
         setLoadFailed(false);
       } catch {
         setEntries(null);
@@ -20,7 +20,7 @@ export default function WeeklyProduction() {
     }
 
     function onStorage(event: StorageEvent) {
-      if (event.key === storageKey || event.key === null) load();
+      if (event.key === productionStorageKey(accountId) || event.key === null) load();
     }
 
     load();
@@ -30,7 +30,7 @@ export default function WeeklyProduction() {
       window.removeEventListener("storage", onStorage);
       window.removeEventListener("pageshow", load);
     };
-  }, []);
+  }, [accountId]);
 
   const totals = entries && weeklyPublications(entries);
   return (

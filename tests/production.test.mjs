@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { calendar, metrics, readEntries, validDate, validEntry, weeklyPublications } from "../app/studio/producao/model.mjs";
+import { calendar, metrics, productionStorageKey, readEntries, validDate, validEntry, weeklyPublications } from "../app/studio/producao/model.mjs";
 
 const entry = { id: "1", title: "Primeiro Short", format: "Short", stage: "Ideia", date: "", notes: "" };
 
@@ -58,3 +58,16 @@ test("mantém os cartões antigos e distingue quadro vazio de dados inválidos",
   assert.throws(() => readEntries({ getItem: () => '{"unexpected":true}' }));
   assert.equal(validEntry({ ...entry, publishedOn: "2026-02-30" }), false);
 });
+
+test("carrega o quadro do usuário sem usar o quadro local antigo", () => {
+  const storage = new Map([
+    [productionStorageKey(), JSON.stringify([{ ...entry, title: "Registro local" }])],
+    [productionStorageKey("account-a"), JSON.stringify([entry])],
+  ]);
+  assert.deepEqual(readEntries(storageAdapter(storage), "account-a"), [entry]);
+  assert.deepEqual(readEntries(storageAdapter(storage), "account-b"), []);
+});
+
+function storageAdapter(storage) {
+  return { getItem: (key) => storage.get(key) ?? null };
+}

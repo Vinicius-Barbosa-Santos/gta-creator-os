@@ -18,6 +18,7 @@ export function metrics(entries: Entry[]): { publications: number; measured: num
 
 export const storageKey: string;
 export function isPublished(stage: string): boolean;
-export function readEntries(storage: Pick<Storage, "getItem">): Entry[];
+export function productionStorageKey(accountId?: string): string;
+export function readEntries(storage: Pick<Storage, "getItem">, accountId?: string): Entry[];
 export function publicationToday(now?: Date): string;
 export function weeklyPublications(entries: Entry[], now?: Date): { long: number; shorts: number; lives: number; undated: number };

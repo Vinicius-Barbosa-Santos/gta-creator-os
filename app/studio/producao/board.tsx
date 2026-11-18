@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useState, type FormEvent } from "react";
-import { calendar, formats, isPublished, metrics, publicationToday, readEntries, stages, storageKey, validEntry, type Entry } from "./model.mjs";
+import { calendar, formats, isPublished, metrics, publicationToday, readEntries, stages, productionStorageKey, validEntry, type Entry } from "./model.mjs";
 
 import IdeasPanel from "./ideas-panel";
 
 const dateFormat = new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeZone: "UTC" });
 
-export default function Board() {
+export default function Board({ accountId }: { accountId?: string }) {
   const [entries, setEntries] = useState<Entry[] | null>(null);
   const [editing, setEditing] = useState<Entry | null>(null);
   const [error, setError] = useState("");
@@ -15,15 +15,15 @@ export default function Board() {
 
   useEffect(() => {
     try {
-      setEntries(readEntries(localStorage));
+      setEntries(readEntries(localStorage, accountId));
     } catch {
       setError("Não foi possível carregar o quadro neste navegador.");
     }
-  }, []);
+  }, [accountId]);
 
   function persist(next: Entry[]) {
     try {
-      localStorage.setItem(storageKey, JSON.stringify(next));
+      localStorage.setItem(productionStorageKey(accountId), JSON.stringify(next));
       setEntries(next);
       setError("");
       return true;

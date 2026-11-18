@@ -4,16 +4,25 @@ import Link from "next/link";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { logout, saveProfile } from "../actions";
-import { authorized } from "../session";
+import { studioIdentity } from "../session";
 import { duration, isStage, stages, weeklyPlan, type Stage } from "../studio-plan";
 
 export const dynamic = "force-dynamic";
 
 export default async function Studio({ searchParams }: { searchParams: Promise<{ erro?: string }> }) {
-  if (!(await authorized())) redirect("/login");
+  const identity = await studioIdentity();
+  if (!identity) redirect("/login");
 
   let profile: { name: string; hours: number; stage: Stage } | undefined;
-  try {
+  let profileFailed = false;
+  if (identity.kind === "account") {
+    const { data, error } = await identity.client.from("studio_profiles")
+      .select("channel_name, weekly_hours, stage").eq("user_id", identity.id).maybeSingle();
+    profileFailed = Boolean(error);
+    if (data && isStage(data.stage)) {
+      profile = { name: data.channel_name, hours: data.weekly_hours, stage: data.stage };
+    }
+  } else try {
     const saved = JSON.parse((await cookies()).get("studio-profile")?.value ?? "null");
     if (typeof saved?.name === "string" && Number.isInteger(saved.hours) && saved.hours >= 1 && saved.hours <= 40) {
       profile = { name: saved.name, hours: saved.hours, stage: isStage(saved.stage) ? saved.stage : "captura" };
@@ -36,6 +45,7 @@ export default async function Studio({ searchParams }: { searchParams: Promise<{
           </nav>
         </PageBanner>
       </div>
+      {erro === "sair" && <p role="alert" className="mb-4 text-rose-300">Não foi possível sair. Tente novamente.</p>}
       <div className="grid gap-6 md:grid-cols-2">
         <section className="panel">
           <p className="eyebrow">PLANO DA SEMANA</p>
@@ -58,7 +68,7 @@ export default async function Studio({ searchParams }: { searchParams: Promise<{
             <p className="mt-3 text-neutral-300">Preencha o perfil para gerar o plano com base no seu tempo e no estágio do canal.</p>
           )}
         </section>
-        <WeeklyProduction />
+        <WeeklyProduction key={identity.kind === "account" ? identity.id : "local"} accountId={identity.kind === "account" ? identity.id : undefined} />
         <section id="perfil" className="panel md:col-span-2">
           <h2 className="text-2xl font-bold">Perfil do canal</h2>
           <form action={saveProfile} className="mt-5 grid items-end gap-4 sm:grid-cols-2">
@@ -70,9 +80,10 @@ export default async function Studio({ searchParams }: { searchParams: Promise<{
               </select>
             </label>
             <button className="button">Salvar e gerar plano</button>
-            {erro && <p role="alert" className="text-rose-300">Informe um nome e uma disponibilidade entre 1 e 40 horas.</p>}
+            {erro === "perfil" && <p role="alert" className="text-rose-300">Informe um nome e uma disponibilidade entre 1 e 40 horas.</p>}
+            {(erro === "salvar" || profileFailed) && <p role="alert" className="text-rose-300">Não foi possível acessar o perfil no banco. Tente novamente.</p>}
           </form>
-          <p className="mt-4 text-sm text-neutral-400">O perfil fica salvo neste navegador.</p>
+          <p className="mt-4 text-sm text-neutral-400">{identity.kind === "account" ? "O perfil fica salvo na sua conta." : "O perfil fica salvo neste navegador."}</p>
         </section>
       </div>
     </main>
