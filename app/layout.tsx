@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
-import { siteName, siteUrl, socialLinks } from "./site";
+import { beginnerCoursePath, siteName, siteUrl, socialLinks } from "./site";
 
 export const metadata: Metadata = {
   verification: { google: "t1bR0fA1jI6ixqEskNfWooa7Y0pROaiAICK2nH7FYzU" },
@@ -20,8 +20,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <nav aria-label="Navegação principal" className="flex flex-wrap gap-5 text-sm">
             <Link href="/noticias">Notícias</Link>
             <Link href="/guias">Guias</Link>
-            <Link href="/demo">Demonstração</Link>
-            <Link href="/studio">Estúdio ↗</Link>
+            <Link href={beginnerCoursePath}>Curso para iniciantes</Link>
             {socialLinks.map(({ label, href }) => (
               <a key={label} href={href}>{label}</a>
             ))}

@@ -2,7 +2,7 @@ import PageBanner from "../page-banner";
 import Image from "next/image";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { captureGuidePath } from "../site";
+import { beginnerCoursePath, captureGuidePath } from "../site";
 import { editorialGuides } from "./editorial-guides";
 
 export const metadata: Metadata = {
@@ -69,8 +69,9 @@ export default function Guias() {
         </div>
         <div className="p-5 sm:p-8">
           <p className="eyebrow">EM PREPARAÇÃO</p>
-          <h2 className="mt-3 text-3xl font-bold">Primeiras horas em Vice City</h2>
-          <p className="mt-4 text-neutral-300">Guia planejado com rotas testadas no PS5, demonstrações em vídeo e checklist de progresso. Compra avulsa quando o conteúdo estiver pronto.</p>
+          <h2 className="mt-3 text-3xl font-bold">GTA VI do zero no PS5</h2>
+          <p className="mt-4 text-neutral-300">Conheça a trilha de aulas para as primeiras horas no jogo e leia a prévia gratuita.</p>
+          <Link className="portal-secondary mt-4 inline-block" href={beginnerCoursePath}>Ver o curso →</Link>
         </div>
       </article>
     </main>

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { captureGuidePath } from "./site";
+import { beginnerCoursePath, captureGuidePath } from "./site";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -8,7 +8,7 @@ export const metadata: Metadata = { alternates: { canonical: "/" } };
 const cards = [
   { href: "/noticias", category: "NOTÍCIAS", title: "O que acontece em GTA", cover: "/vice-city.webp", position: "object-[68%_center]" },
   { href: captureGuidePath, category: "GUIA GRATUITO", title: "Da captura ao primeiro clipe", cover: "/guia-captura.webp", position: "object-center" },
-  { href: "/guias#premium", category: "GUIA EM PREPARAÇÃO", title: "Primeiras horas em Vice City", cover: "/portal-leonida.webp", position: "object-[76%_center]" },
+  { href: beginnerCoursePath, category: "CURSO EM PREPARAÇÃO", title: "GTA VI do zero no PS5", cover: "/portal-leonida.webp", position: "object-[76%_center]" },
 ];
 
 export default function Home() {
@@ -22,8 +22,8 @@ export default function Home() {
             <h1 id="portal-title" className="display mt-4">De olho em<br /><span>Vice City.</span></h1>
             <p className="mt-5 max-w-xs text-base leading-relaxed text-white">Notícias de GTA, guias em português e dicas para gravar no PS5.</p>
             <div className="mt-6 flex flex-wrap items-center gap-4">
-              <Link href="/noticias" className="portal-cta">Acompanhar notícias <span aria-hidden="true">↗</span></Link>
-              <Link href="/demo" className="portal-secondary">Ver demonstração</Link>
+              <Link href={beginnerCoursePath} className="portal-cta">Conhecer o curso <span aria-hidden="true">↗</span></Link>
+              <Link href="/noticias" className="portal-secondary">Acompanhar notícias</Link>
             </div>
           </div>
         </section>
