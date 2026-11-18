@@ -2,7 +2,11 @@ import PageBanner from "../page-banner";
 import type { Metadata } from "next";
 import { googleHeadlines, googleNews } from "./feed";
 
-export const metadata: Metadata = { title: "Notícias de GTA | GTA Creator OS" };
+export const metadata: Metadata = {
+  title: "Notícias de GTA 6",
+  description: "Acompanhe as notícias de GTA 6 e consulte as fontes de cada atualização.",
+  alternates: { canonical: "/noticias" },
+};
 export const dynamic = "force-dynamic";
 
 const confirmed = [

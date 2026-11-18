@@ -3,7 +3,8 @@ import Link from "next/link";
 import PageBanner from "../page-banner";
 
 export const metadata: Metadata = {
-  title: "Demonstração do Estúdio | GTA Creator OS",
+  robots: { index: false },
+  title: "Demonstração do Estúdio",
   description: "Veja como organizar pautas, acompanhar vídeos de gameplay e revisar os resultados.",
 };
 

@@ -1,9 +1,13 @@
+import type { Metadata } from "next";
+import { captureGuidePath } from "./site";
 import Image from "next/image";
 import Link from "next/link";
 
+export const metadata: Metadata = { alternates: { canonical: "/" } };
+
 const cards = [
   { href: "/noticias", category: "NOTÍCIAS", title: "O que acontece em GTA", cover: "/vice-city.webp", position: "object-[68%_center]" },
-  { href: "/guias#captura", category: "GUIA GRATUITO", title: "Da captura ao primeiro clipe", cover: "/guia-captura.webp", position: "object-center" },
+  { href: captureGuidePath, category: "GUIA GRATUITO", title: "Da captura ao primeiro clipe", cover: "/guia-captura.webp", position: "object-center" },
   { href: "/guias#premium", category: "GUIA EM PREPARAÇÃO", title: "Primeiras horas em Vice City", cover: "/portal-leonida.webp", position: "object-[76%_center]" },
 ];
 

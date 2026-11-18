@@ -1,6 +1,14 @@
 import PageBanner from "../page-banner";
 import Image from "next/image";
-import CaptureSetup from "./capture-setup";
+import type { Metadata } from "next";
+import Link from "next/link";
+import { captureGuidePath } from "../site";
+
+export const metadata: Metadata = {
+  title: "Guias de GTA 6 e gravação no PS5",
+  description: "Guias em português sobre GTA 6, captura de gameplay do PS5 e produção de Shorts.",
+  alternates: { canonical: "/guias" },
+};
 
 export default function Guias() {
   return (
@@ -22,10 +30,9 @@ export default function Guias() {
           <p className="mt-4 max-w-prose text-neutral-300">
             Jogue no monitor e grave no MacBook com a placa de captura FY-1133 e o OBS. Depois do teste, escolha um trecho e revise o enquadramento vertical e as legendas antes de publicar um Short.
           </p>
-          <a href="#capture-setup-title" className="portal-secondary mt-5 inline-block">Ver conexões e configuração ↓</a>
+          <Link href={captureGuidePath} className="portal-secondary mt-5 inline-block">Ver conexões e configuração →</Link>
         </div>
       </article>
-      <CaptureSetup />
       <article id="premium" className="portal-card portal-card-premium grid overflow-hidden !p-0 md:grid-cols-[1fr_2fr]">
         <div className="relative aspect-video md:aspect-auto md:min-h-48">
           <Image

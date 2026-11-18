@@ -1,9 +1,12 @@
+import type { Metadata } from "next";
 import PasswordField from "./password-field";
 import PageBanner from "../page-banner";
 import { redirect } from "next/navigation";
 import { login } from "../actions";
 import { authorized, configured } from "../session";
 import { supabaseConfig, usesSupabase } from "../supabase/config";
+
+export const metadata: Metadata = { title: "Entrar no Estúdio", robots: { index: false } };
 
 const loginErrors = {
   acesso: "E-mail ou senha inválidos. Use as credenciais de um usuário criado para o Estúdio.",
