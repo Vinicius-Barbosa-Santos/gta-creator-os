@@ -15,18 +15,70 @@ body {
 .accent {
   color: #b8f34a;
 }
+.portal {
+  background: radial-gradient(ellipse at 80% 100%, #2a1634, transparent 42%), #100d19;
+}
 .hero {
-  border-block: 1px solid #393049;
+  border-block: 1px solid #64405c;
   background:
-    linear-gradient(90deg, #0b0f19 4%, #0b0f1994 58%, #0b0f1930),
-    url("/vice-city.webp") center 55% / cover,
-    radial-gradient(ellipse at 85% 63%, #a14c68, #292043 55%, #0b0f19);
+    linear-gradient(90deg, #100b1a 1%, #100b1ad6 30%, #100b1a26 80%),
+    linear-gradient(0deg, #100d19 0%, transparent 40%),
+    url("/vice-city.webp") center 58% / cover no-repeat,
+    #281333;
 }
 .display {
-  font-size: clamp(3.25rem, 10vw, 8rem);
-  line-height: 0.86;
+  font-family: "Arial Black", "Arial", sans-serif;
+  font-size: clamp(3.1rem, 9.5vw, 8.75rem);
+  line-height: 0.87;
   font-weight: 950;
   letter-spacing: -0.07em;
+}
+.display span {
+  color: #ff9ebc;
+  background: linear-gradient(115deg, #ffc695, #ff90c5 70%, #d59efc);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.portal-label {
+  color: #ffc3d8;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+}
+.portal-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.8rem 1.15rem;
+  border-radius: 0.35rem;
+  background: #ff9dbb;
+  color: #230f20;
+  font-weight: 800;
+}
+.portal-cta:hover { background: #ffc5a7; }
+.portal-secondary {
+  color: #ffd1de;
+  font-weight: 750;
+  text-decoration: underline;
+  text-underline-offset: 0.3em;
+}
+.portal-secondary:hover { color: white; }
+.portal-card {
+  padding: clamp(1.25rem, 4vw, 2rem);
+  border: 1px solid #58394f;
+  border-radius: 0.65rem;
+  background: #1a1324;
+}
+.portal-card-premium {
+  background: linear-gradient(135deg, #30192b, #1a1324 80%);
+}
+@media (max-width: 639px) {
+  .hero {
+    background:
+      linear-gradient(0deg, #100d19 3%, #100b1ac9 35%, #100b1a25 90%),
+      url("/vice-city.webp") 65% center / cover no-repeat,
+      #281333;
+  }
 }
 .eyebrow {
   color: #c9b7fc;
