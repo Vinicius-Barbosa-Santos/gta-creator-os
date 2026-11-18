@@ -41,6 +41,7 @@ export default async function Studio({ searchParams }: { searchParams: Promise<{
             <Link href="/studio/producao" className="portal-cta">Produção e agenda</Link>
             <Link href="/studio/analytics" className="portal-secondary">Acompanhamento</Link>
             <Link href="/studio/plano" className="portal-secondary">Plano editorial</Link>
+            <Link href="/studio/edicao" className="portal-secondary">Guia de edição</Link>
             <Link href="/studio/criativos" className="portal-secondary">Thumbnails e vinhetas</Link>
             <form action={logout}><button className="portal-secondary cursor-pointer">Sair</button></form>
           </nav>
