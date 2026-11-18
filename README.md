@@ -33,3 +33,9 @@ O fluxo de qualidade executa instalação pelo lockfile, testes de validação e
 Configure `OPENAI_API_KEY` em `.env.local` ou no ambiente do servidor. Reinicie o desenvolvimento local ou faça um novo deploy. No estúdio, abra **Produção e agenda**, selecione formato e minutos disponíveis e descreva as gravações que você já tem. A descrição é enviada ao provedor para gerar três pautas. Use **Salvar no quadro** para colocar uma pauta na etapa Ideia. Revise o texto antes de publicar.
 
 A chave fica no servidor e as sugestões exigem uma sessão do estúdio. Configure um orçamento para o projeto da API e monitore o consumo. O intervalo de 20 segundos funciona por instância em execução. O modelo padrão pode ser substituído por outro compatível com Responses, raciocínio mínimo e saída estruturada em `OPENAI_IDEAS_MODEL`.
+
+## Banco de testes do Estúdio
+
+Aplique `supabase/migrations/20261118124000_studio_accounts.sql` somente no projeto de desenvolvimento durante a validação. A migração cria perfis e cartões vinculados à conta autenticada. Acesso anônimo não recebe permissão nas tabelas, e as políticas restringem leitura e escrita a registros do próprio usuário.
+
+Depois de ligar o aplicativo ao Supabase Auth, valide o isolamento com duas contas comuns. Crie um perfil e um cartão na conta A e confirme que a conta B não os lê, atualiza ou remove. Ao criar um cartão com a sessão B, tente atribuí-lo à conta A e confirme que a política recusa. Repita com a sessão anônima. Use a chave publicável e sessões de usuário nessas verificações.
