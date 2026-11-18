@@ -8,7 +8,7 @@ const connections = [
 
 const steps = [
   { title: "Ligue o PS5 à placa", detail: "Conecte o cabo HDMI que sai do PS5 à porta HDMI IN da FY-1133." },
-  { title: "Ligue a placa ao monitor", detail: "Use um segundo cabo HDMI entre a porta HDMI OUT da placa e o monitor. Selecione essa entrada no monitor para jogar pelo pass-through." },
+  { title: "Ligue a placa ao monitor", detail: "Use um segundo cabo HDMI entre a porta HDMI OUT da placa e o monitor. Selecione essa entrada no monitor para jogar pelo pass-through, se a placa oferecer essa função." },
   { title: "Conecte a captura ao MacBook", detail: "Conecte a porta USB da placa ao hub USB 3.0 Strimtech e ligue o hub ao MacBook. O vídeo da gravação chega ao OBS por esse caminho." },
   { title: "Desative o HDCP para capturar o gameplay", detail: "No PS5, acesse Configurações → Sistema → HDMI e desligue Habilitar HDCP. Alguns apps de mídia protegida podem exigir que você reative a opção." },
   { title: "Adicione a placa no OBS", detail: "Na cena que vai gravar, abra Fontes → + → Dispositivo de captura de vídeo. Escolha a placa que o Mac reconheceu, como USB Video ou HDMI Capture." },
@@ -20,7 +20,7 @@ export default function CaptureSetup() {
     <section aria-labelledby="capture-setup-title" className="panel grid gap-7">
       <div>
         <h3 id="capture-setup-title" className="text-2xl font-black">Como ligar o PS5, o monitor e o MacBook</h3>
-        <p className="mt-2 text-neutral-300">O HDMI leva a imagem até o monitor e o USB envia a captura ao OBS.</p>
+        <p className="mt-2 text-neutral-300">O USB envia a captura ao OBS. O diagrama também mostra a ligação opcional ao monitor via HDMI OUT, ainda pendente de teste no setup Viny Plays.</p>
       </div>
       <figure>
         <a href="/setup-captura-referencia.png" target="_blank" rel="noopener noreferrer" className="block rounded-xl">

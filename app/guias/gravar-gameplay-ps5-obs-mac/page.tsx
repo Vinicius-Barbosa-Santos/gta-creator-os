@@ -3,6 +3,7 @@ import Link from "next/link";
 import PageBanner from "../../page-banner";
 import { captureGuidePath } from "../../site";
 import CaptureSetup from "../capture-setup";
+import ObsWalkthrough from "../obs-walkthrough";
 
 export const metadata: Metadata = {
   title: "Como gravar gameplay do PS5 no Mac com OBS",
@@ -15,7 +16,9 @@ export default function CaptureGuide() {
     <main className="shell grid gap-6 py-12">
       <Link href="/guias" className="portal-secondary w-fit">← Todos os guias</Link>
       <PageBanner title="Como gravar gameplay do PS5 no Mac com OBS" cover="/guia-captura.webp" />
+      <a className="portal-secondary w-fit" href="#obs-walkthrough">Ir para a configuração completa do OBS ↓</a>
       <CaptureSetup />
+      <ObsWalkthrough />
     </main>
   );
 }
