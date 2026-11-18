@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { calendar, validDate, validEntry } from "../app/studio/producao/model.mjs";
+import { calendar, metrics, validDate, validEntry } from "../app/studio/producao/model.mjs";
 
 const entry = { id: "1", title: "Primeiro Short", format: "Short", stage: "Ideia", date: "", notes: "" };
 
@@ -24,4 +24,15 @@ test("ordena apenas os conteúdos com data e preserva a lista original", () => {
   const original = [later, entry, earlier];
   assert.deepEqual(calendar(original), [earlier, later]);
   assert.deepEqual(original, [later, entry, earlier]);
+});
+
+test("soma métricas registradas apenas de conteúdo publicado ou analisado", () => {
+  assert.deepEqual(metrics([
+    { ...entry, views: 400 },
+    { ...entry, stage: "Publicado", views: 15, impressions: 50 },
+    { ...entry, stage: "Analisado", views: 0 },
+    { ...entry, stage: "Publicado" },
+  ]), { publications: 3, measured: 2, views: 15, impressions: 50 });
+  assert.equal(validEntry({ ...entry, views: -1 }), false);
+  assert.equal(validEntry({ ...entry, impressions: 1.5 }), false);
 });

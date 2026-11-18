@@ -11,7 +11,23 @@ export function validEntry(entry) {
   return Boolean(entry && typeof entry.id === "string" && typeof entry.title === "string" &&
     entry.title.trim() && entry.title.length <= 120 && formats.includes(entry.format) &&
     stages.includes(entry.stage) && (entry.date === "" || validDate(entry.date)) &&
-    typeof entry.notes === "string" && entry.notes.length <= 1500);
+    typeof entry.notes === "string" && entry.notes.length <= 1500 &&
+    (entry.views === undefined || validCount(entry.views)) &&
+    (entry.impressions === undefined || validCount(entry.impressions)));
+}
+
+function validCount(value) {
+  return Number.isSafeInteger(value) && value >= 0 && value <= 1_000_000_000;
+}
+
+export function metrics(entries) {
+  return entries.filter((entry) => entry.stage === "Publicado" || entry.stage === "Analisado")
+    .reduce((totals, entry) => ({
+      publications: totals.publications + 1,
+      measured: totals.measured + Number(entry.views !== undefined || entry.impressions !== undefined),
+      views: totals.views + (entry.views ?? 0),
+      impressions: totals.impressions + (entry.impressions ?? 0),
+    }), { publications: 0, measured: 0, views: 0, impressions: 0 });
 }
 
 export function calendar(entries) {

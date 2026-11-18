@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, type FormEvent } from "react";
-import { calendar, formats, stages, validEntry, type Entry } from "./model.mjs";
+import { calendar, formats, metrics, stages, validEntry, type Entry } from "./model.mjs";
 
 const storageKey = "gta-studio-production-v1";
 const dateFormat = new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeZone: "UTC" });
@@ -39,6 +39,8 @@ export default function Board() {
     if (!entries) return;
     const form = event.currentTarget;
     const values = new FormData(form);
+    const views = values.get("views");
+    const impressions = values.get("impressions");
     const entry: Entry = {
       id: editing?.id ?? crypto.randomUUID(),
       title: String(values.get("title") ?? "").trim(),
@@ -46,6 +48,8 @@ export default function Board() {
       stage: String(values.get("stage") ?? ""),
       date: String(values.get("date") ?? ""),
       notes: String(values.get("notes") ?? "").trim(),
+      views: views === "" ? undefined : Number(views),
+      impressions: impressions === "" ? undefined : Number(impressions),
     };
     if (!validEntry(entry)) {
       setError("Confira os campos do conteúdo.");
@@ -57,6 +61,8 @@ export default function Board() {
       setEditing(null);
     }
   }
+
+  const totals = metrics(entries ?? []);
 
   return (
     <>
@@ -76,6 +82,12 @@ export default function Board() {
             </label>
             <label className="grid gap-2 sm:col-span-2">Roteiro e checklist
               <textarea className="rounded border border-slate-500 bg-slate-950 p-2" name="notes" rows={4} maxLength={1500} defaultValue={editing?.notes} />
+            </label>
+            <label className="grid gap-2">Visualizações (opcional)
+              <input type="number" name="views" min={0} max={1_000_000_000} step={1} defaultValue={editing?.views} />
+            </label>
+            <label className="grid gap-2">Impressões (opcional)
+              <input type="number" name="impressions" min={0} max={1_000_000_000} step={1} defaultValue={editing?.impressions} />
             </label>
             <div className="flex flex-wrap gap-4 sm:col-span-2">
               <button className="button">Salvar conteúdo</button>
@@ -113,6 +125,16 @@ export default function Board() {
               </section>
             ))}
           </div>
+          <section className="panel mt-6">
+            <h2 className="text-xl font-bold">Resultados das publicações</h2>
+            <p className="mt-2 text-sm text-neutral-400">{totals.measured} de {totals.publications} publicações com métricas cadastradas manualmente.</p>
+            {totals.measured > 0 && (
+              <dl className="mt-4 grid grid-cols-2 gap-4">
+                <div><dt>Visualizações registradas</dt><dd className="accent text-3xl font-black">{totals.views.toLocaleString("pt-BR")}</dd></div>
+                <div><dt>Impressões registradas</dt><dd className="accent text-3xl font-black">{totals.impressions.toLocaleString("pt-BR")}</dd></div>
+              </dl>
+            )}
+          </section>
           <section className="panel mt-6">
             <h2 className="text-xl font-bold">Agenda editorial</h2>
             {calendar(entries).length === 0 && <p className="mt-3 text-neutral-400">Defina uma data no conteúdo para incluí-lo na agenda.</p>}
