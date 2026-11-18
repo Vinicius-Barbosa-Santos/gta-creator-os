@@ -28,7 +28,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </nav>
         </header>
         {children}
-        <footer className="shell py-10 text-sm text-neutral-400">Projeto independente sobre GTA 6.</footer>
+        <footer className="shell py-10 text-sm text-neutral-400">Projeto independente sobre GTA 6, sem vínculo com a Rockstar Games ou a Take-Two.</footer>
       </body>
     </html>
   );

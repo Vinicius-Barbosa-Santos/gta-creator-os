@@ -74,10 +74,6 @@ body {
 }
 .portal-tile::after { background: linear-gradient(0deg, #0e0919f5, #17102490 46%, #17102422 80%); }
 .portal-tile > div { z-index: 1; }
-@media (prefers-reduced-motion: no-preference) {
-  .portal-tile img { transition: transform 220ms ease; }
-  .portal-tile:hover img { transform: scale(1.035); }
-}
 .portal-label {
   color: #ffc3d8;
   font-size: 0.75rem;
@@ -232,4 +228,28 @@ input:-webkit-autofill {
 .studio-lane {
   background: var(--surface);
   border: 1px solid var(--border);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .portal-feature-art,
+  .portal-tile > img,
+  .page-banner-art {
+    transform: perspective(900px) rotateY(0deg) rotateX(0deg) scale(1);
+    transition: transform 550ms cubic-bezier(0.2, 0.7, 0.3, 1);
+  }
+
+  .portal-tile:focus-visible > img {
+    transform: perspective(900px) rotateY(-5deg) rotateX(3deg) scale(1.09);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
+  .portal-feature:hover .portal-feature-art,
+  .page-banner:hover .page-banner-art {
+    transform: perspective(900px) rotateY(-4deg) rotateX(2deg) scale(1.09);
+  }
+
+  .portal-tile:hover > img {
+    transform: perspective(900px) rotateY(-5deg) rotateX(3deg) scale(1.09);
+  }
 }

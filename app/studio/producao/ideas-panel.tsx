@@ -16,7 +16,7 @@ export default function IdeasPanel({ onSave }: { onSave: (idea: Idea, format: st
   return (
     <section className="panel mb-6" aria-labelledby="ideas-heading">
       <h2 id="ideas-heading" className="text-2xl font-bold">Sugestões de pautas com IA</h2>
-      <p className="mt-2 text-sm text-neutral-300">O formato, o tempo e a descrição abaixo são enviados à OpenAI. Revise as ideias antes de produzir.</p>
+      <p className="mt-2 text-sm text-neutral-300">O formato, o tempo e a descrição abaixo são enviados à OpenAI. Descreva só o material da gravação e evite nomes, contatos ou outros dados pessoais. Revise as ideias antes de produzir.</p>
       <form action={submit} className="mt-4 grid gap-4 sm:grid-cols-2">
         <label className="grid gap-2">Formato
           <select name="format" defaultValue="Short" className="">
