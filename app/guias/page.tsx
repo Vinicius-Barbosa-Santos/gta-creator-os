@@ -1,5 +1,6 @@
 import PageBanner from "../page-banner";
 import Image from "next/image";
+import CaptureSetup from "./capture-setup";
 
 export default function Guias() {
   return (
@@ -18,13 +19,13 @@ export default function Guias() {
         <div className="p-5 sm:p-8">
           <p className="eyebrow">LEITURA GRATUITA</p>
           <h2 className="mt-3 text-3xl font-bold">Da captura ao primeiro clipe</h2>
-          <ol className="mt-5 list-decimal space-y-3 pl-5 text-neutral-300">
-            <li>Selecione a placa de captura como fonte de vídeo no OBS e confira o medidor do áudio do jogo.</li>
-            <li>Grave um trecho curto com bastante movimento e uma fala. Abra o arquivo para conferir fluidez, volume e sincronismo.</li>
-            <li>Corte o tempo de preparação e escolha um momento que faça sentido sozinho. Revise o enquadramento vertical e as legendas antes de publicar um Short.</li>
-          </ol>
+          <p className="mt-4 max-w-prose text-neutral-300">
+            Jogue no monitor e grave no MacBook com a placa de captura FY-1133 e o OBS. Depois do teste, escolha um trecho e revise o enquadramento vertical e as legendas antes de publicar um Short.
+          </p>
+          <a href="#capture-setup-title" className="portal-secondary mt-5 inline-block">Ver conexões e configuração ↓</a>
         </div>
       </article>
+      <CaptureSetup />
       <article id="premium" className="portal-card portal-card-premium grid overflow-hidden !p-0 md:grid-cols-[1fr_2fr]">
         <div className="relative aspect-video md:aspect-auto md:min-h-48">
           <Image
