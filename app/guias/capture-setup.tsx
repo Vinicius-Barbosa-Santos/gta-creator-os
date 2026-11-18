@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 const connections = [
   { cable: "HDMI", origin: "PS5 · HDMI OUT", target: "Placa FY-1133 · HDMI IN" },
   { cable: "HDMI", origin: "Placa FY-1133 · HDMI OUT", target: "Monitor · HDMI IN" },
@@ -20,6 +22,23 @@ export default function CaptureSetup() {
         <h3 id="capture-setup-title" className="text-2xl font-black">Como ligar o PS5, o monitor e o MacBook</h3>
         <p className="mt-2 text-neutral-300">O HDMI leva a imagem até o monitor e o USB envia a captura ao OBS.</p>
       </div>
+      <figure>
+        <a href="/setup-captura-referencia.png" target="_blank" rel="noopener noreferrer" className="block rounded-xl">
+          <Image
+            src="/setup-captura-referencia.png"
+            alt="Diagrama do setup de captura: PS5 ligado à FY-1133 por HDMI, placa ligada ao monitor por HDMI e ao MacBook com OBS pelo hub USB."
+            width={1672}
+            height={941}
+            unoptimized
+            className="h-auto w-full rounded-xl border border-white/15"
+          />
+        </a>
+        <figcaption className="mt-3 text-sm text-neutral-300">
+          <a className="portal-secondary" href="/setup-captura-referencia.png" target="_blank" rel="noopener noreferrer">
+            Abrir imagem em tamanho original ↗
+          </a>
+        </figcaption>
+      </figure>
       <figure>
         <figcaption className="mb-3 font-bold">Mapa dos cabos</figcaption>
         <ul className="grid gap-3 md:grid-cols-3">
