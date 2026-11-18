@@ -11,7 +11,9 @@ export const cookieOptions = {
 export function configured() {
   const key = process.env.STUDIO_ACCESS_KEY;
   const secret = process.env.STUDIO_SESSION_SECRET;
-  return Boolean(key && secret && key !== secret && key.length >= 32 && secret.length >= 32);
+  return Boolean(
+    key && secret && key !== secret && key.length >= 32 && secret.length >= 32,
+  );
 }
 
 export function equal(left: string, right: string) {
@@ -30,5 +32,10 @@ export async function authorized() {
   const token = (await cookies()).get("studio-session")?.value;
   if (!token) return false;
   const [expiration, signature] = token.split(".");
-  return Boolean(signature && /^\d+$/.test(expiration) && Number(expiration) > Date.now() && equal(signature, sign(expiration)));
+  return Boolean(
+    signature &&
+    /^\d+$/.test(expiration) &&
+    Number(expiration) > Date.now() &&
+    equal(signature, sign(expiration)),
+  );
 }

@@ -2,20 +2,24 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { logout, saveProfile } from "../actions";
 import { authorized } from "../session";
+import { duration, isStage, stages, weeklyPlan, type Stage } from "../studio-plan";
+
+export const dynamic = "force-dynamic";
 
 export default async function Studio({ searchParams }: { searchParams: Promise<{ erro?: string }> }) {
   if (!(await authorized())) redirect("/login");
 
-  let profile: { name: string; hours: number } | undefined;
+  let profile: { name: string; hours: number; stage: Stage } | undefined;
   try {
     const saved = JSON.parse((await cookies()).get("studio-profile")?.value ?? "null");
     if (typeof saved?.name === "string" && Number.isInteger(saved.hours) && saved.hours >= 1 && saved.hours <= 40) {
-      profile = saved;
+      profile = { name: saved.name, hours: saved.hours, stage: isStage(saved.stage) ? saved.stage : "captura" };
     }
   } catch {
     // Um perfil inválido volta para a configuração inicial.
   }
   const { erro } = await searchParams;
+  const plan = profile ? weeklyPlan(profile.hours, profile.stage) : undefined;
 
   return (
     <main className="shell py-10">
@@ -28,10 +32,25 @@ export default async function Studio({ searchParams }: { searchParams: Promise<{
       </div>
       <div className="grid gap-6 md:grid-cols-2">
         <section className="panel">
-          <p className="eyebrow">PRÓXIMA AÇÃO SUGERIDA</p>
-          <h2 className="mt-3 text-2xl font-bold">Revise um teste de captura</h2>
-          <p className="mt-3 text-neutral-300">Grave um trecho no PS5 e confira fluidez, áudio e sincronismo no arquivo salvo pelo OBS.</p>
-          {profile && <p className="mt-5 text-neutral-300">Reserve 20% para imprevistos. Capacidade planejada de {(profile.hours * 0.8).toLocaleString("pt-BR")} h por semana.</p>}
+          <p className="eyebrow">PLANO DA SEMANA</p>
+          {profile && plan ? (
+            <>
+              <h2 className="mt-3 text-2xl font-bold">{stages[profile.stage].label}</h2>
+              <p className="mt-3 text-neutral-300">
+                {duration(plan.total)} em tarefas sugeridas. Limite de {duration(plan.budget)} para produção e {duration(plan.reserve)} reservados para imprevistos.
+              </p>
+              <ol className="mt-5 divide-y divide-slate-700">
+                {plan.tasks.map((task, index) => (
+                  <li key={task.title} className="flex items-start justify-between gap-4 py-3">
+                    <span>{index === 0 && <span className="accent block text-sm">Próxima ação</span>}{task.title}</span>
+                    <span className="shrink-0 text-sm text-neutral-300">{duration(task.minutes)}</span>
+                  </li>
+                ))}
+              </ol>
+            </>
+          ) : (
+            <p className="mt-3 text-neutral-300">Preencha o perfil para gerar o plano com base no seu tempo e no estágio do canal.</p>
+          )}
         </section>
         <section className="panel">
           <p className="eyebrow">DADOS FICTÍCIOS PARA DEMONSTRAÇÃO</p>
@@ -43,10 +62,15 @@ export default async function Studio({ searchParams }: { searchParams: Promise<{
         </section>
         <section id="perfil" className="panel md:col-span-2">
           <h2 className="text-2xl font-bold">Perfil do canal</h2>
-          <form action={saveProfile} className="mt-5 grid items-end gap-4 sm:grid-cols-[2fr_1fr_auto]">
+          <form action={saveProfile} className="mt-5 grid items-end gap-4 sm:grid-cols-2">
             <label className="grid gap-2">Nome do canal<input name="name" defaultValue={profile?.name} required maxLength={60} /></label>
             <label className="grid gap-2">Horas por semana<input name="hours" type="number" min={1} max={40} defaultValue={profile?.hours ?? 8} required /></label>
-            <button className="button">Salvar perfil</button>
+            <label className="grid gap-2">Etapa atual
+              <select className="w-full rounded border border-slate-500 bg-slate-950 p-2.5" name="stage" defaultValue={profile?.stage ?? "captura"}>
+                {Object.entries(stages).map(([key, stage]) => <option key={key} value={key}>{stage.label}</option>)}
+              </select>
+            </label>
+            <button className="button">Salvar e gerar plano</button>
             {erro && <p role="alert" className="text-rose-300">Informe um nome e uma disponibilidade entre 1 e 40 horas.</p>}
           </form>
           <p className="mt-4 text-sm text-neutral-400">O perfil fica salvo neste navegador.</p>
