@@ -1,4 +1,5 @@
 import { createHash, createHmac, timingSafeEqual } from "node:crypto";
+import { billingMode } from "./billing/config";
 import { cookies } from "next/headers";
 import { usesSupabase } from "./supabase/config";
 import { studioClient } from "./supabase/server";
@@ -42,14 +43,23 @@ async function ownerAuthorized() {
   );
 }
 
-export async function studioIdentity() {
-  if (!usesSupabase()) return (await ownerAuthorized()) ? { kind: "local" as const } : null;
-
+export async function accountIdentity() {
   const client = await studioClient();
   if (!client) return null;
   const { data, error } = await client.auth.getClaims();
   const id = data?.claims.sub;
   return !error && id ? { kind: "account" as const, id, client } : null;
+}
+
+export async function studioIdentity() {
+  const mode = billingMode();
+  if (!usesSupabase()) return !mode && (await ownerAuthorized()) ? { kind: "local" as const } : null;
+
+  const account = await accountIdentity();
+  if (!account || !mode) return account;
+
+  const { data, error } = await account.client.rpc("studio_billing_status").single<{ mode: string; entitled: boolean }>();
+  return !error && data?.mode === mode && data.entitled ? account : null;
 }
 
 export async function authorized() {

@@ -45,3 +45,28 @@ Configure `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` em
 O quadro e a contagem semanal consultam `studio_entries` quando o login do Supabase está ativo. Para copiar cartões do armazenamento do navegador vinculado à mesma conta, use **Importar cartões** em **Produção e agenda**. A importação mantém os IDs e ignora registros que já existem no banco. O quadro local anterior à criação de contas fica preservado separadamente.
 
 Aplique também `supabase/migrations/20261118133000_studio_analytics.sql` para habilitar **Estúdio → Acompanhamento**. Essa tela permite registrar as métricas dos primeiros dois ou sete dias de um vídeo e salvar uma revisão por semana. Os valores vêm do preenchimento manual.
+
+## Cobrança do Estúdio
+
+A integração suporta pagamento único em reais via Stripe Checkout. O ambiente começa
+com a cobrança desativada e mantém o acesso atual. A página fica em
+`/estudio/pagamento`. O teste deve usar um projeto Supabase separado e chaves Stripe
+de teste. Atribua o acesso aos primeiros usuários criando contas individuais.
+
+1. Aplique as migrações em ordem. Configure as variáveis de cobrança de
+   `.env.example` no servidor. Use um preço Stripe de pagamento único em BRL.
+2. Registre `/api/stripe/webhook` no Stripe para `payment_intent.succeeded`,
+   `charge.refunded` e `charge.dispute.created`. Confira o segredo de assinatura
+   do endpoint neste ambiente.
+3. No banco de teste, atualize `studio_billing_settings.mode` para `test`.
+   O valor precisa corresponder a `STUDIO_BILLING_MODE`. Valide a sessão com duas
+   contas, pagamentos de teste confirmados e recusados, reenvio de eventos e reembolso total.
+4. O modo `live` exige preço, credenciais e endpoint de produção. Antes de ativar,
+   planeje o acesso das contas existentes, que passarão a exigir pagamento, e confirme
+   o preço, o suporte e a política de reembolso. Monitore falhas de entrega no Stripe.
+   Contestação ou reembolso total revoga a compra. A solução não restaura acesso
+   automaticamente após a reversão de uma contestação.
+
+Nunca exponha a chave de serviço do Supabase ou as chaves de servidor da Stripe em
+variáveis `NEXT_PUBLIC_*`. O acesso usa políticas RLS e o retorno do checkout apenas
+mostra o estado registrado no banco.

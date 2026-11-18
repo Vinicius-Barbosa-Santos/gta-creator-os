@@ -3,7 +3,7 @@ import PasswordField from "./password-field";
 import PageBanner from "../page-banner";
 import { redirect } from "next/navigation";
 import { login } from "../actions";
-import { authorized, configured } from "../session";
+import { accountIdentity, authorized, configured } from "../session";
 import { supabaseConfig, usesSupabase } from "../supabase/config";
 
 export const metadata: Metadata = { title: "Entrar no Estúdio", robots: { index: false } };
@@ -17,6 +17,7 @@ const loginErrors = {
 
 export default async function Login({ searchParams }: { searchParams: Promise<{ erro?: string }> }) {
   if (await authorized()) redirect("/studio");
+  if (await accountIdentity()) redirect("/estudio/pagamento");
   const accountMode = usesSupabase();
   const enabled = accountMode ? Boolean(supabaseConfig()) : configured();
   const { erro } = await searchParams;
