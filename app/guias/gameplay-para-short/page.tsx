@@ -14,7 +14,7 @@ export default function GameplayParaShort() {
   return (
     <main className="shell grid gap-6 py-12">
       <Link href="/guias" className="portal-secondary w-fit">← Todos os guias</Link>
-      <PageBanner title="Da gameplay ao Short" cover="/vice-city.webp" />
+      <PageBanner title="Da gameplay ao Short" cover="/guias/shorts.webp" />
       <ShortPreview />
       <section className="panel grid gap-4">
         <h2 className="text-2xl font-bold">Monte seu primeiro recorte</h2>

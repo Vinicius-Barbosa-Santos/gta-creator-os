@@ -1,0 +1,92 @@
+export const editorialGuides = [
+  {
+    slug: "planejar-canal-de-games",
+    title: "Planeje seu canal de games",
+    description: "Defina para quem você grava e escolha um primeiro vídeo que caiba na sua rotina.",
+    cover: "/guias/canal.webp",
+    alt: "Controle de videogame ao lado de um storyboard desenhado",
+    steps: [
+      "Escolha uma dúvida de um tipo específico de jogador. Escreva o que essa pessoa vai conseguir fazer depois de assistir.",
+      "Liste o equipamento e o tempo que você já tem. Divida o trabalho em roteiro, gravação e revisão antes de marcar a publicação.",
+      "Escolha um formato que você consiga repetir. Use o primeiro vídeo para descobrir quanto tempo cada etapa realmente consome.",
+    ],
+    exampleTitle: "Exemplo de estreia",
+    example: [
+      ["Público", "Quem quer gravar seu primeiro gameplay de PS5 no Mac."],
+      ["Vídeo", "Um teste curto mostrando como conferir se a voz e o jogo saíram juntos no arquivo."],
+      ["Entrega", "Um clipe e uma lista dos pontos que precisam de ajuste antes de gravar mais."],
+    ],
+  },
+  {
+    slug: "pesquisar-pautas-de-games",
+    title: "Pesquise uma pauta antes de gravar",
+    description: "Transforme uma dúvida sobre um jogo em um vídeo que mostra de onde veio a informação.",
+    cover: "/guias/pautas.webp",
+    alt: "Duas telas com páginas para comparação e um caderno de anotações",
+    steps: [
+      "Escreva uma pergunta que dê para responder em uma frase. Procure o anúncio original, a documentação ou a gravação completa antes de usar recortes.",
+      "Anote o link, a data da consulta e o trecho que sustenta cada afirmação. Diferencie o que você observou da sua interpretação.",
+      "Revise título, roteiro e descrição juntos. Se uma afirmação ainda estiver sem fonte, trate-a como pendente e ajuste a promessa do vídeo.",
+    ],
+    exampleTitle: "Ficha de pesquisa",
+    example: [
+      ["Pergunta", "A atualização mudou uma opção de câmera?"],
+      ["Evidência", "Procure a opção nas notas oficiais e compare com a versão do seu jogo."],
+      ["Decisão", "Se a opção não aparecer no teste, descreva em qual versão você testou e mantenha a conclusão em aberto."],
+    ],
+  },
+  {
+    slug: "primeiro-video-sem-aparecer",
+    title: "Do roteiro ao primeiro vídeo sem aparecer",
+    description: "Monte um vídeo curto com narração, imagens próprias e legendas.",
+    cover: "/guias/video.webp",
+    alt: "Microfone ao lado de um computador com uma linha do tempo de edição",
+    steps: [
+      "Escreva o roteiro em três blocos: a dúvida do público, o que você vai mostrar e o resultado esperado. Leia em voz alta e corte o que repetir a imagem.",
+      "Grave a narração em trechos curtos. Use imagens suas ou autorizadas e coloque cada uma onde ela esclarece a fala.",
+      "Revise legendas e volume. Assista uma vez no celular sem som e outra com fones para encontrar pontos confusos.",
+    ],
+    exampleTitle: "Exemplo de linha do tempo",
+    example: [
+      ["0–4 s · Abertura", "Você consegue gravar o jogo e a voz juntos? Abra com o trecho de teste."],
+      ["4–18 s · Demonstração", "Mostre a fonte do jogo e a fonte do microfone. Destaque cada uma quando ela entrar na narração."],
+      ["18–25 s · Conferência", "Mostre a reprodução do arquivo e explique o que ouvir para verificar as duas fontes."],
+    ],
+  },
+  {
+    slug: "publicar-e-revisar-video",
+    title: "Publique o vídeo e revise o resultado",
+    description: "Prepare título, capa e legenda e transforme a revisão em uma próxima ação.",
+    cover: "/guias/publicacao.webp",
+    alt: "Monitor com miniaturas de vídeo e um gráfico ilustrativo",
+    steps: [
+      "Escolha um título que diga o que o vídeo entrega. Use a capa para mostrar o assunto com um elemento visual fácil de reconhecer no celular.",
+      "Depois do envio, reproduza o vídeo e confira imagem, legenda, som e links. Registre a data e o formato da publicação.",
+      "Compare vídeos de formato e idade semelhantes. Use impressões, cliques e retenção para levantar perguntas e anote uma mudança para o próximo vídeo.",
+    ],
+    exampleTitle: "Exemplo de revisão sem métricas inventadas",
+    example: [
+      ["Título inicial", "Como corrigir o gameplay esticado no OBS"],
+      ["Capa", "Um antes e depois usando dois quadros do seu próprio teste."],
+      ["Próxima ação", "Se a abertura demorar para mostrar a correção, comece o próximo vídeo com o resultado."],
+    ],
+  },
+  {
+    slug: "rotina-e-custos-do-canal",
+    title: "Organize a rotina e os custos do canal",
+    description: "Planeje o tempo de produção, registre despesas e acompanhe o que entrou.",
+    cover: "/guias/custos.webp",
+    alt: "Calculadora e caderno de despesas ao lado de um controle",
+    steps: [
+      "Reserve blocos semanais para gravar, editar e revisar. Comece com uma frequência que você consegue manter sem comprar equipamento extra.",
+      "Registre custo, data e motivo de cada despesa. Separe gastos recorrentes de compras únicas e receitas previstas de valores recebidos.",
+      "No fim do mês, compare o tempo e o dinheiro gastos com os vídeos concluídos. Escolha um gargalo para resolver antes de aumentar a frequência ou o orçamento.",
+    ],
+    exampleTitle: "Exemplo de semana de produção",
+    example: [
+      ["Gravação", "Um bloco para testar o áudio e capturar o trecho."],
+      ["Edição", "Um bloco para preparar o vídeo e extrair um Short."],
+      ["Revisão", "Anote tempo gasto, despesa real e o teste que fará na próxima semana."],
+    ],
+  },
+];
