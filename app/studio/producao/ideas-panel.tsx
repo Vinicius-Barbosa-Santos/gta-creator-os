@@ -5,7 +5,7 @@ import { formats } from "./model.mjs";
 import { suggestIdeas } from "./ideas-action";
 import type { Idea, IdeasResult } from "./ideas";
 
-export default function IdeasPanel({ onSave }: { onSave: (idea: Idea, format: string) => boolean }) {
+export default function IdeasPanel({ onSave }: { onSave: (idea: Idea, format: string) => Promise<boolean> }) {
   const [saved, setSaved] = useState<number[]>([]);
   const [result, submit, pending] = useActionState(async (previous: IdeasResult, data: FormData) => {
     const next = await suggestIdeas(previous, data);
@@ -43,8 +43,8 @@ export default function IdeasPanel({ onSave }: { onSave: (idea: Idea, format: st
                 <div><dt className="accent">Roteiro</dt><dd className="whitespace-pre-line">{idea.script}</dd></div>
                 <div><dt className="accent">Cenas</dt><dd className="whitespace-pre-line">{idea.scenes}</dd></div>
               </dl>
-              <button type="button" className="button disabled:opacity-50" disabled={saved.includes(index)} onClick={() => {
-                if (result.format && onSave(idea, result.format)) setSaved((current) => [...current, index]);
+              <button type="button" className="button disabled:opacity-50" disabled={saved.includes(index)} onClick={async () => {
+                if (result.format && await onSave(idea, result.format)) setSaved((current) => [...current, index]);
               }}>{saved.includes(index) ? "Salva no quadro" : "Salvar no quadro"}</button>
             </article>
           ))}

@@ -1,5 +1,6 @@
 "use client";
 
+import { loadAccountEntries } from "./producao/storage-actions";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { productionStorageKey, readEntries, weeklyPublications, type Entry } from "./producao/model.mjs";
@@ -9,11 +10,16 @@ export default function WeeklyProduction({ accountId }: { accountId?: string }) 
   const [loadFailed, setLoadFailed] = useState(false);
 
   useEffect(() => {
-    function load() {
+    let active = true;
+    async function load() {
       try {
-        setEntries(readEntries(localStorage, accountId));
+        const saved = accountId ? await loadAccountEntries(accountId) : readEntries(localStorage);
+        if (!active) return;
+        if (!saved) throw new Error();
+        setEntries(saved);
         setLoadFailed(false);
       } catch {
+        if (!active) return;
         setEntries(null);
         setLoadFailed(true);
       }
@@ -27,6 +33,7 @@ export default function WeeklyProduction({ accountId }: { accountId?: string }) 
     window.addEventListener("storage", onStorage);
     window.addEventListener("pageshow", load);
     return () => {
+      active = false;
       window.removeEventListener("storage", onStorage);
       window.removeEventListener("pageshow", load);
     };
@@ -36,7 +43,7 @@ export default function WeeklyProduction({ accountId }: { accountId?: string }) 
   return (
     <section className="panel" aria-labelledby="weekly-production">
       <h2 id="weekly-production" className="text-2xl font-bold">Produção da semana</h2>
-      <p className="mt-2 text-sm text-neutral-300">Publicações registradas neste navegador, de segunda-feira até hoje, no horário de Brasília.</p>
+      <p className="mt-2 text-sm text-neutral-300">Publicações registradas {accountId ? "na sua conta" : "neste navegador"}, de segunda-feira até hoje, no horário de Brasília.</p>
       {loadFailed && <p className="mt-4 text-rose-300" role="status">Não foi possível ler o quadro de produção.</p>}
       {!loadFailed && !totals && <p className="mt-4 text-neutral-300" role="status">Carregando publicações…</p>}
       {totals && (

@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { calendar, formats, isPublished, metrics, publicationToday, readEntries, stages, productionStorageKey, validEntry, type Entry } from "./model.mjs";
 
+import { changeAccountEntry, importAccountEntries, loadAccountEntries } from "./storage-actions";
 import IdeasPanel from "./ideas-panel";
 
 const dateFormat = new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeZone: "UTC" });
@@ -13,7 +14,21 @@ export default function Board({ accountId }: { accountId?: string }) {
   const [error, setError] = useState("");
   const [removing, setRemoving] = useState<string | null>(null);
 
+  const [importable, setImportable] = useState<Entry[]>([]);
+  const [busy, setBusy] = useState(false);
+  const writing = useRef(false);
+
   useEffect(() => {
+    let active = true;
+    if (accountId) {
+      void loadAccountEntries(accountId).then((saved) => {
+        if (!active) return;
+        if (saved) setEntries(saved);
+        else setError("Não foi possível carregar o quadro no Supabase. Recarregue para tentar novamente.");
+      }).catch(() => { if (active) setError("Não foi possível carregar o quadro no Supabase."); });
+      try { setImportable(readEntries(localStorage, accountId)); } catch { /* O quadro no servidor continua disponível. */ }
+      return () => { active = false; };
+    }
     try {
       setEntries(readEntries(localStorage, accountId));
     } catch {
@@ -21,19 +36,29 @@ export default function Board({ accountId }: { accountId?: string }) {
     }
   }, [accountId]);
 
-  function persist(next: Entry[]) {
+  async function persist(next: Entry[], entry: Entry | null, id: string, operation: "create" | "update" | "delete") {
+    if (writing.current) return false;
+    writing.current = true;
+    setBusy(true);
     try {
-      localStorage.setItem(productionStorageKey(accountId), JSON.stringify(next));
+      if (accountId) {
+        if (!(await changeAccountEntry(accountId, entry, id, operation))) throw new Error("Gravação recusada");
+      } else {
+        localStorage.setItem(productionStorageKey(), JSON.stringify(next));
+      }
       setEntries(next);
       setError("");
       return true;
     } catch {
-      setError("Não foi possível salvar. Libere espaço ou permita o armazenamento neste navegador.");
+      setError("Não foi possível salvar. Tente novamente.");
       return false;
+    } finally {
+      writing.current = false;
+      setBusy(false);
     }
   }
 
-  function save(event: FormEvent<HTMLFormElement>) {
+  async function save(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!entries) return;
     const form = event.currentTarget;
@@ -61,9 +86,30 @@ export default function Board({ accountId }: { accountId?: string }) {
       return;
     }
     const next = editing ? entries.map((item) => item.id === editing.id ? entry : item) : [...entries, entry];
-    if (persist(next)) {
+    if (await persist(next, entry, entry.id, editing ? "update" : "create")) {
       form.reset();
       setEditing(null);
+    }
+  }
+
+  async function importLocal() {
+    if (!accountId || !importable.length || writing.current) return;
+    writing.current = true;
+    setBusy(true);
+    setError("");
+    try {
+      for (let offset = 0; offset < importable.length; offset += 100) {
+        if (!(await importAccountEntries(accountId, importable.slice(offset, offset + 100)))) throw new Error();
+      }
+      const saved = await loadAccountEntries(accountId);
+      if (!saved) throw new Error();
+      setEntries(saved);
+      setImportable([]);
+    } catch {
+      setError("Não foi possível concluir a importação. Você pode repetir sem duplicar cartões.");
+    } finally {
+      writing.current = false;
+      setBusy(false);
     }
   }
 
@@ -71,11 +117,16 @@ export default function Board({ accountId }: { accountId?: string }) {
 
   return (
     <>
-      <p className="mb-5 text-sm text-neutral-400">O quadro fica salvo neste navegador. Use o estúdio em um perfil de navegador pessoal.</p>
+      <p className="mb-5 text-sm text-neutral-400">{accountId ? "O quadro fica salvo na sua conta." : "O quadro fica salvo neste navegador."}</p>
       {error && <p className="mb-4 text-rose-300" role="alert">{error}</p>}
       {entries && (
         <>
-          <IdeasPanel onSave={(idea, format) => {
+          {importable.length > 0 && (
+            <button type="button" className="button mb-4" disabled={busy} onClick={() => void importLocal()}>
+              Importar {importable.length} cartões salvos neste navegador
+            </button>
+          )}
+          <IdeasPanel onSave={async (idea, format) => {
             const entry: Entry = {
               id: crypto.randomUUID(),
               title: idea.title,
@@ -84,7 +135,7 @@ export default function Board({ accountId }: { accountId?: string }) {
               date: "",
               notes: `Gancho: ${idea.hook}\n\nRoteiro: ${idea.script}\n\nCenas: ${idea.scenes}`,
             };
-            return validEntry(entry) && persist([...entries, entry]);
+            return validEntry(entry) && persist([...entries, entry], entry, entry.id, "create");
           }} />
           <form key={editing ? `${editing.id}:${editing.stage}` : "new"} id="conteudo" onSubmit={save} className="panel grid gap-4 sm:grid-cols-2">
             <h2 className="text-xl font-bold sm:col-span-2">{editing ? "Editar conteúdo" : "Novo conteúdo"}</h2>
@@ -110,7 +161,7 @@ export default function Board({ accountId }: { accountId?: string }) {
               <input type="number" name="impressions" min={0} max={1_000_000_000} step={1} defaultValue={editing?.impressions} />
             </label>
             <div className="flex flex-wrap gap-4 sm:col-span-2">
-              <button className="button">Salvar conteúdo</button>
+              <button className="button" disabled={busy}>Salvar conteúdo</button>
               {editing && <button type="button" className="accent" onClick={() => setEditing(null)}>Cancelar edição</button>}
             </div>
           </form>
@@ -124,7 +175,7 @@ export default function Board({ accountId }: { accountId?: string }) {
                   <article key={entry.id} className="mt-3 grid gap-2 rounded border border-slate-700 p-3">
                     <h4 className="break-words font-semibold">{entry.title}</h4>
                     <p className="text-sm text-neutral-400">{entry.format}</p>
-                    <select aria-label={`Etapa de ${entry.title}`} value={entry.stage}
+                    <select aria-label={`Etapa de ${entry.title}`} value={entry.stage} disabled={busy}
                       onChange={(event) => {
                         const stage = event.target.value;
                         if (isPublished(stage) && (!entry.publishedOn || entry.publishedOn > publicationToday())) {
@@ -132,15 +183,16 @@ export default function Board({ accountId }: { accountId?: string }) {
                           document.getElementById("conteudo")?.scrollIntoView({ block: "start" });
                           return;
                         }
-                        persist(entries.map((item) => item.id === entry.id ? { ...item, stage } : item));
+                        const updated = { ...entry, stage };
+                        void persist(entries.map((item) => item.id === entry.id ? updated : item), updated, entry.id, "update");
                       }}>
                       {stages.map((option) => <option key={option}>{option}</option>)}
                     </select>
                     <a href="#conteudo" className="accent" onClick={() => setEditing(entry)}>Editar</a>
                     {removing === entry.id ? (
                       <div className="flex flex-wrap gap-3">
-                        <button className="text-rose-300" onClick={() => {
-                          if (persist(entries.filter((item) => item.id !== entry.id))) {
+                        <button className="text-rose-300" onClick={async () => {
+                          if (await persist(entries.filter((item) => item.id !== entry.id), null, entry.id, "delete")) {
                             setRemoving(null);
                             if (editing?.id === entry.id) setEditing(null);
                           }
