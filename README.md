@@ -21,3 +21,9 @@ Coloque apenas esta pasta em um repositório GitHub. Importe o repositório em h
 ## Escopo da primeira versão
 
 O perfil fica no navegador em cookie HTTP-only. A sessão assinada expira em oito horas. A autenticação é para um proprietário com chave aleatória. A próxima etapa comercial precisa de autenticação por cliente, PostgreSQL para compras e permissões, e confirmação de pagamento pelo servidor. A página pública já apresenta o produto como em preparação.
+
+## Produção editorial
+
+Depois de entrar no estúdio, abra **Produção e agenda**. Cadastre o título, formato e roteiro ou checklist. Mova o conteúdo pelas etapas do quadro usando o seletor do cartão e inclua uma data para aparecer na agenda. O armazenamento atual é por navegador. Use um perfil pessoal e evite cadastrar informações sensíveis no quadro.
+
+O fluxo de qualidade executa instalação pelo lockfile, testes de validação e ordenação da agenda, build de produção e auditoria de dependências.
