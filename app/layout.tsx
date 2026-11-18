@@ -14,6 +14,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <header className="shell flex min-h-20 flex-wrap items-center justify-between gap-4 py-4">
           <Link href="/" className="font-black tracking-tight">GTA <span className="accent">CREATOR OS</span></Link>
           <nav aria-label="Navegação principal" className="flex flex-wrap gap-5 text-sm">
+            <Link href="/noticias">Notícias</Link>
             <Link href="/guias">Guias</Link>
             <Link href="/studio">Estúdio ↗</Link>
           </nav>

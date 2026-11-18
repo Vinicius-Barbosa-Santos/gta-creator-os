@@ -29,7 +29,7 @@ export default async function Studio({ searchParams }: { searchParams: Promise<{
           <p className="eyebrow">ESTÚDIO PRIVADO</p>
           <h1 className="mt-2 text-4xl font-black">{profile?.name ?? "Configure seu canal"}</h1>
         </div>
-        <div className="flex flex-wrap items-center gap-4"><Link href="/studio/producao" className="button">Produção e agenda</Link><form action={logout}><button className="accent cursor-pointer">Sair</button></form></div>
+        <div className="flex flex-wrap items-center gap-4"><Link href="/studio/producao" className="button">Produção e agenda</Link><Link href="/studio/criativos" className="accent">Thumbnails e vinhetas</Link><form action={logout}><button className="accent cursor-pointer">Sair</button></form></div>
       </div>
       <div className="grid gap-6 md:grid-cols-2">
         <section className="panel">
