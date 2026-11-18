@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export default function Guias() {
   return (
     <main className="shell grid gap-6 py-12">
-      <PageBanner title="Guias" cover="/vice-city.webp" />
+      <PageBanner title="Guias do Viny Plays" cover="/vice-city.webp" />
       <article id="captura" className="portal-card grid overflow-hidden !p-0 md:grid-cols-[1fr_2fr]">
         <div className="relative aspect-video md:aspect-auto">
           <Image
@@ -26,12 +26,17 @@ export default function Guias() {
         </div>
         <div className="p-5 sm:p-8">
           <p className="eyebrow">LEITURA GRATUITA</p>
-          <h2 className="mt-3 text-3xl font-bold">Da captura ao primeiro clipe</h2>
+          <h2 className="mt-3 text-3xl font-bold">Meu setup de captura no OBS</h2>
           <p className="mt-4 max-w-prose text-neutral-300">
-            Jogue no monitor e grave no MacBook com a placa de captura FY-1133 e o OBS. Depois do teste, escolha um trecho e revise o enquadramento vertical e as legendas antes de publicar um Short.
+            Veja como conectei o PS5 ao Mac, separei a voz do áudio do jogo e diagnostiquei as travadas no teste em 4K.
           </p>
           <Link href={captureGuidePath} className="portal-secondary mt-5 inline-block">Ver conexões e configuração →</Link>
         </div>
+      </article>
+      <article className="portal-card">
+        <h2 className="text-3xl font-bold">Da gameplay ao Short</h2>
+        <p className="mt-3 text-neutral-300">Compare a imagem horizontal e o recorte vertical numa demonstração interativa.</p>
+        <Link href="/guias/gameplay-para-short" className="portal-secondary mt-4 inline-block">Experimentar o enquadramento →</Link>
       </article>
       <article id="premium" className="portal-card portal-card-premium grid overflow-hidden !p-0 md:grid-cols-[1fr_2fr]">
         <div className="relative aspect-video md:aspect-auto md:min-h-48">
