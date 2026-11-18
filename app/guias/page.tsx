@@ -1,7 +1,5 @@
 import Image from "next/image";
 
-const coverSizes = "(min-width: 1160px) 373px, (min-width: 768px) 33vw, calc(100vw - 40px)";
-
 export default function Guias() {
   return (
     <main className="shell grid gap-6 py-12">
@@ -12,7 +10,7 @@ export default function Guias() {
             src="/guia-captura.webp"
             alt="Mesa com console, placa de captura e monitores para gravar gameplay"
             fill
-            sizes={coverSizes}
+            unoptimized
             className="object-cover"
           />
         </div>
@@ -32,7 +30,7 @@ export default function Guias() {
             src="/vice-city.webp"
             alt="Ilustração de uma avenida costeira com palmeiras e um carro ao pôr do sol"
             fill
-            sizes={coverSizes}
+            unoptimized
             className="object-cover object-[65%_center]"
           />
         </div>
