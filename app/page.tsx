@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { beginnerCoursePath, captureGuidePath } from "./site";
+import { beginnerCoursePath, captureGuidePath, gtaGuidePath } from "./site";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -22,7 +22,7 @@ export default function Home() {
             <h1 id="portal-title" className="display mt-4">De olho em<br /><span>Vice City.</span></h1>
             <p className="mt-5 max-w-xs text-base leading-relaxed text-white">Notícias de GTA, guias em português e dicas para gravar no PS5.</p>
             <div className="mt-6 flex flex-wrap items-center gap-4">
-              <Link href={beginnerCoursePath} className="portal-cta">Conhecer o curso <span aria-hidden="true">↗</span></Link>
+              <Link href={gtaGuidePath} className="portal-cta">Explorar o guia GTA 6</Link>
               <Link href="/noticias" className="portal-secondary">Acompanhar notícias</Link>
             </div>
           </div>

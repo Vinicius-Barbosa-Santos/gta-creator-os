@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
-import { beginnerCoursePath, siteName, siteUrl, socialLinks } from "./site";
+import { beginnerCoursePath, gtaGuidePath, siteName, siteUrl, socialLinks } from "./site";
 
 export const metadata: Metadata = {
   verification: { google: "t1bR0fA1jI6ixqEskNfWooa7Y0pROaiAICK2nH7FYzU" },
@@ -18,6 +18,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <header className="shell flex min-h-20 flex-wrap items-center justify-between gap-4 py-4">
           <Link href="/" className="font-black tracking-tight">VINY <span className="accent">PLAYS</span></Link>
           <nav aria-label="Navegação principal" className="flex flex-wrap gap-5 text-sm">
+            <Link href={gtaGuidePath}>Guia GTA 6</Link>
             <Link href="/noticias">Notícias</Link>
             <Link href="/guias">Guias</Link>
             <Link href={beginnerCoursePath}>Curso para iniciantes</Link>
